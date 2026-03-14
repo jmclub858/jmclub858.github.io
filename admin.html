@@ -1,18 +1,185 @@
-<!-- admin.html - JM Club Admin Command Center (FULLY FIXED & INTERACTIVE) -->
+<!-- admin.html - JM Club ULTIMATE HACKER TERMINAL -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JM Club | Admin Command Center</title>
+    <title>JM CLUB // ROOT TERMINAL</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
+        :root {
+            --neon-green: #00ff41;
+            --neon-cyan: #00f3ff;
+            --neon-red: #ff0040;
+            --neon-amber: #ffbf00;
+            --dark-bg: #0a0a0f;
+            --terminal-bg: #001100;
         }
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--dark-bg);
+            color: var(--neon-green);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        .font-header {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* CRT Screen Effect */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        /* Flicker Animation */
+        @keyframes flicker {
+            0% { opacity: 0.97; }
+            5% { opacity: 0.95; }
+            10% { opacity: 0.9; }
+            15% { opacity: 0.95; }
+            20% { opacity: 0.99; }
+            25% { opacity: 0.95; }
+            30% { opacity: 0.9; }
+            35% { opacity: 0.96; }
+            40% { opacity: 0.98; }
+            45% { opacity: 0.95; }
+            50% { opacity: 0.99; }
+            55% { opacity: 0.93; }
+            60% { opacity: 0.9; }
+            65% { opacity: 0.96; }
+            70% { opacity: 1; }
+            75% { opacity: 0.97; }
+            80% { opacity: 0.95; }
+            85% { opacity: 0.92; }
+            90% { opacity: 0.96; }
+            95% { opacity: 0.99; }
+            100% { opacity: 0.94; }
+        }
+        
+        .flicker {
+            animation: flicker 0.15s infinite;
+        }
+        
+        /* Terminal Window */
+        .terminal-window {
+            background: rgba(0, 20, 0, 0.95);
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2), inset 0 0 20px rgba(0, 255, 65, 0.05);
+            position: relative;
+        }
+        
+        .terminal-window::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-green), transparent, var(--neon-cyan));
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        .terminal-header {
+            background: linear-gradient(90deg, rgba(0,255,65,0.2), transparent);
+            border-bottom: 1px solid var(--neon-green);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid;
+        }
+        
+        .btn-close { background: var(--neon-red); border-color: var(--neon-red); }
+        .btn-min { background: var(--neon-amber); border-color: var(--neon-amber); }
+        .btn-max { background: var(--neon-green); border-color: var(--neon-green); }
+        
+        /* Hacker Text Effects */
+        .hacker-text {
+            text-shadow: 0 0 5px currentColor;
+        }
+        
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        
+        /* Blinking Cursor */
+        .cursor::after {
+            content: '█';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Progress Bars */
+        .progress-bar {
+            height: 4px;
+            background: rgba(0, 255, 65, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: width 0.3s ease;
+        }
+        
+        /* Data Stream Animation */
+        @keyframes dataStream {
+            0% { transform: translateY(-100%); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        .data-particle {
+            position: fixed;
+            font-size: 10px;
+            color: var(--neon-green);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: dataStream 5s linear infinite;
         }
         
         /* Custom Scrollbar */
@@ -20,373 +187,352 @@
             width: 8px;
             height: 8px;
         }
+        
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #001100;
         }
+        
         ::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 4px;
+            background: var(--neon-green);
+            border-radius: 0;
         }
         
-        /* Glassmorphism */
-        .glass {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Neon Effects */
-        .neon-glow {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
-        }
-        
-        .neon-text {
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-        }
-        
-        .neon-border {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
-        }
-        
-        /* Scroll Reveal Animations - FIXED */
-        .reveal {
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        
-        .reveal.animate {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        
-        .reveal.animate.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .reveal-scale {
-            opacity: 1;
-            transform: scale(1);
-            transition: all 0.6s cubic-bezier(0.5, 0, 0, 1);
-        }
-        
-        .reveal-scale.animate {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        
-        .reveal-scale.animate.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        /* Stagger delays */
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        
-        /* Gradient Background */
-        .gradient-bg {
-            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
-        }
-        
-        /* Grid Pattern */
-        .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        
-        /* Login Overlay */
-        .login-overlay {
-            background: rgba(2, 6, 23, 0.98);
-            backdrop-filter: blur(20px);
-        }
-        
-        /* Input Effects */
-        .input-security {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .input-security:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Button Effects */
-        .btn-cyber {
+        /* Button Styles */
+        .hack-btn {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 8px 16px;
+            font-family: 'Share Tech Mono', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
         
-        .btn-cyber::before {
+        .hack-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: var(--neon-green);
+            transition: left 0.3s;
+            z-index: -1;
         }
         
-        .btn-cyber:hover::before {
-            left: 100%;
+        .hack-btn:hover {
+            color: #000;
         }
         
-        .btn-cyber:active {
-            transform: scale(0.98);
+        .hack-btn:hover::before {
+            left: 0;
         }
         
-        /* Status Badges */
-        .badge-pending {
-            background: rgba(234, 179, 8, 0.2);
-            color: #eab308;
-            border: 1px solid rgba(234, 179, 8, 0.3);
+        .hack-btn-danger {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
         }
         
-        .badge-approved {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+        .hack-btn-danger::before {
+            background: var(--neon-red);
         }
         
-        .badge-rejected {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.3);
+        .hack-btn-cyan {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
         }
         
-        /* Table Styles */
-        .cyber-table {
-            border-collapse: separate;
-            border-spacing: 0;
+        .hack-btn-cyan::before {
+            background: var(--neon-cyan);
+        }
+        
+        /* Input Fields */
+        .hack-input {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            color: var(--neon-green);
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
             width: 100%;
+            transition: all 0.3s;
         }
         
-        .cyber-table th {
-            background: rgba(59, 130, 246, 0.1);
-            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #94a3b8;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .hack-input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
         }
         
-        .cyber-table td {
-            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-            padding: 1rem;
-            color: #e2e8f0;
+        .hack-input::placeholder {
+            color: rgba(0, 255, 65, 0.3);
         }
         
-        .cyber-table tr:hover td {
-            background: rgba(59, 130, 246, 0.05);
+        /* File Drop Zone */
+        .drop-zone {
+            border: 2px dashed rgba(0, 255, 65, 0.3);
+            background: rgba(0, 20, 0, 0.5);
+            transition: all 0.3s;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
         }
         
-        /* Card Hover */
-        .admin-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 65, 0.1);
         }
         
-        .admin-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px -15px rgba(59, 130, 246, 0.4);
+        /* Live Indicator */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            animation: pulse-red 1s infinite;
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
         
         /* Toast Notifications */
-        .toast {
+        .toast-container {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            color: white;
-            font-weight: 500;
-            z-index: 100;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            max-width: 400px;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .toast.show {
+        .hack-toast {
+            background: rgba(0, 20, 0, 0.95);
+            border: 1px solid var(--neon-green);
+            padding: 16px 20px;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        
+        .hack-toast.show {
             transform: translateX(0);
         }
         
-        .toast-success {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.5);
+        .hack-toast.alert {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
         }
         
-        .toast-error {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            box-shadow: 0 10px 40px -10px rgba(239, 68, 68, 0.5);
+        /* Table Styles */
+        .hack-table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .toast-info {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.5);
+        .hack-table th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+            color: var(--neon-cyan);
+            font-weight: normal;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
         }
         
-        /* Loading Spinner */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .hack-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+            font-size: 0.9rem;
         }
         
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        .hack-table tr:hover td {
+            background: rgba(0, 255, 65, 0.05);
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .status-pending {
+            border-color: var(--neon-amber);
+            color: var(--neon-amber);
+            background: rgba(255, 191, 0, 0.1);
+        }
+        
+        .status-approved {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            background: rgba(0, 255, 65, 0.1);
+        }
+        
+        .status-rejected {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            background: rgba(255, 0, 64, 0.1);
         }
         
         /* Modal */
-        .modal-overlay {
+        .hack-modal {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(4px);
-            z-index: 50;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9998;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            backdrop-filter: blur(5px);
         }
         
-        .modal-overlay.active {
+        .hack-modal.active {
             display: flex;
         }
         
-        /* Form validation styles */
-        .input-error {
-            border-color: #ef4444 !important;
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+        /* Scan Line */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-green);
+            opacity: 0.5;
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+            z-index: 9997;
+            box-shadow: 0 0 10px var(--neon-green);
         }
         
-        .error-message {
-            color: #ef4444;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            display: none;
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100vh; }
         }
         
-        .error-message.show {
-            display: block;
+        /* Typing Effect */
+        .typing::after {
+            content: '▋';
+            animation: blink 1s infinite;
         }
         
-        /* Empty state animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* Hex Background */
+        .hex-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden;
+            z-index: -1;
         }
         
-        .empty-icon {
-            animation: float 3s ease-in-out infinite;
+        /* Notification Pulse */
+        @keyframes notify-pulse {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-red); }
+            50% { box-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red); }
+        }
+        
+        .notify-pulse {
+            animation: notify-pulse 1s infinite;
         }
     </style>
 </head>
-<body class="gradient-bg text-gray-100 min-h-screen grid-pattern">
+<body class="crt">
+    <div class="scan-line"></div>
+    <div class="hex-bg" id="hexBg"></div>
     
     <!-- Toast Container -->
-    <div id="toastContainer"></div>
-
-    <!-- Login Overlay -->
-    <div id="loginOverlay" class="fixed inset-0 z-50 login-overlay flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl p-8 md:p-12 w-full max-w-md neon-border reveal-scale animate active">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center neon-glow">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-                <h2 class="font-display text-3xl font-bold text-white mb-2 neon-text">Secure Access</h2>
-                <p class="text-gray-400">Command Center Authentication</p>
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Login Terminal -->
+    <div id="loginScreen" class="fixed inset-0 z-50 bg-black flex items-center justify-center p-4">
+        <div class="terminal-window rounded-lg w-full max-w-lg overflow-hidden flicker">
+            <div class="terminal-header">
+                <div class="terminal-btn btn-close"></div>
+                <div class="terminal-btn btn-min"></div>
+                <div class="terminal-btn btn-max"></div>
+                <span class="ml-4 text-xs opacity-70">root@jm-club:~# secure_login</span>
             </div>
-
-            <form id="loginForm" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">Username</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        class="w-full input-security rounded-xl px-4 py-4 text-white placeholder-gray-600 focus:outline-none"
-                        placeholder="Enter username"
-                        autocomplete="off"
-                    >
-                    <div class="error-message" id="usernameError">Username is required</div>
+            <div class="p-8">
+                <div class="text-center mb-8">
+                    <div class="text-6xl mb-4 glitch-text">🔐</div>
+                    <h1 class="font-header text-2xl hacker-text mb-2">ROOT ACCESS REQUIRED</h1>
+                    <p class="text-sm opacity-70">Unauthorized access will be prosecuted</p>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2 uppercase tracking-wider">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        class="w-full input-security rounded-xl px-4 py-4 text-white placeholder-gray-600 focus:outline-none"
-                        placeholder="Enter password"
-                    >
-                    <div class="error-message" id="passwordError">Password is required</div>
+                
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-xs mb-2 opacity-70">USERNAME:</label>
+                        <input type="text" id="username" class="hack-input rounded" placeholder="Enter credentials..." autocomplete="off">
+                    </div>
+                    <div>
+                        <label class="block text-xs mb-2 opacity-70">PASSWORD:</label>
+                        <input type="password" id="password" class="hack-input rounded" placeholder="••••••••">
+                    </div>
+                    <div id="loginError" class="hidden text-red-500 text-sm text-center border border-red-500/30 bg-red-500/10 p-3 rounded">
+                        ACCESS DENIED: INVALID CREDENTIALS
+                    </div>
+                    <button type="submit" class="hack-btn w-full py-4 rounded font-bold text-lg">
+                        <i class="fas fa-terminal mr-2"></i> AUTHENTICATE
+                    </button>
+                </form>
+                
+                <div class="mt-6 text-center">
+                    <a href="index.html" class="text-xs opacity-50 hover:opacity-100 transition-opacity">[ RETURN_TO_MAIN ]</a>
                 </div>
-                <div id="loginError" class="hidden text-red-400 text-sm text-center bg-red-500/10 py-3 rounded-lg border border-red-500/20">
-                    Invalid credentials. Access denied.
-                </div>
-                <button 
-                    type="submit" 
-                    id="loginBtn"
-                    class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl font-bold text-lg text-white transition-all btn-cyber neon-glow flex items-center justify-center gap-2"
-                >
-                    <span id="loginBtnText">Initialize Access</span>
-                    <div id="loginSpinner" class="spinner hidden"></div>
-                </button>
-            </form>
-
-            <div class="mt-6 text-center">
-                <a href="index.html" class="text-gray-500 hover:text-blue-400 text-sm transition-colors">← Return to Main Portal</a>
             </div>
         </div>
     </div>
 
-    <!-- Main Admin Interface (Hidden until login) -->
-    <div id="adminInterface" class="hidden">
+    <!-- Main Admin Interface -->
+    <div id="adminPanel" class="hidden min-h-screen">
         <!-- Header -->
-        <header class="glass border-b border-blue-500/20 sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-20">
-                    <div class="flex items-center gap-4 reveal">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center neon-glow">
-                            <span class="text-xl font-bold text-white">JM</span>
+        <header class="fixed top-0 w-full z-40 bg-black/90 border-b border-green-500/30 backdrop-blur-sm">
+            <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-14">
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 border border-green-500 flex items-center justify-center bg-green-500/10">
+                            <span class="font-header text-green-400 font-bold">#</span>
                         </div>
                         <div>
-                            <h1 class="font-display text-2xl font-bold text-white">Command Center</h1>
-                            <p class="text-xs text-blue-400 uppercase tracking-widest">Administrative Portal</p>
+                            <h1 class="font-header text-lg text-green-400 tracking-wider glitch-text">ROOT_TERMINAL</h1>
+                            <span class="text-[10px] opacity-70 tracking-widest">SYSTEM_ADMINISTRATOR</span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 reveal delay-100">
-                        <div class="hidden md:flex items-center gap-2 px-4 py-2 bg-green-500/10 rounded-full border border-green-500/20">
-                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                            <span class="text-sm text-green-400">System Online</span>
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="live-indicator hidden md:flex">
+                            <span class="live-dot"></span>
+                            <span class="text-xs text-red-400">LIVE_MONITORING</span>
                         </div>
-                        <button onclick="logout()" class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg border border-red-500/20 transition-all text-sm font-medium flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Logout
+                        <div class="text-xs opacity-70" id="clock">00:00:00</div>
+                        <button onclick="logout()" class="hack-btn hack-btn-danger py-2 px-4 rounded text-xs">
+                            <i class="fas fa-power-off"></i> KILL_SESSION
                         </button>
                     </div>
                 </div>
@@ -394,1114 +540,912 @@
         </header>
 
         <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <main class="pt-20 pb-8 px-4 max-w-[1920px] mx-auto space-y-6">
             
-            <!-- Stats Overview -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 reveal animate">
-                <div class="glass-card rounded-2xl p-6 admin-card">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-3xl font-bold text-white" id="totalApps">0</span>
-                    </div>
-                    <h3 class="text-gray-400 text-sm uppercase tracking-wider">Total Applications</h3>
-                </div>
-                
-                <div class="glass-card rounded-2xl p-6 admin-card delay-100">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-3xl font-bold text-white" id="pendingApps">0</span>
-                    </div>
-                    <h3 class="text-gray-400 text-sm uppercase tracking-wider">Pending Review</h3>
-                </div>
-                
-                <div class="glass-card rounded-2xl p-6 admin-card delay-200">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-3xl font-bold text-white" id="approvedApps">0</span>
-                    </div>
-                    <h3 class="text-gray-400 text-sm uppercase tracking-wider">Approved</h3>
-                </div>
-                
-                <div class="glass-card rounded-2xl p-6 admin-card delay-300">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-3xl font-bold text-white" id="totalFiles">0</span>
-                    </div>
-                    <h3 class="text-gray-400 text-sm uppercase tracking-wider">Resources</h3>
-                </div>
-            </div>
-
-            <!-- Notice Board Manager - NEW SECTION -->
-            <section class="glass-card rounded-2xl overflow-hidden reveal animate">
-                <div class="p-6 border-b border-white/10 flex items-center justify-between">
-                    <h2 class="font-display text-xl font-bold text-white flex items-center gap-3">
-                        <span class="w-1 h-6 bg-orange-500 rounded-full"></span>
-                        Notice Board Manager
-                    </h2>
-                    <button onclick="refreshNotices()" class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
-                
-                <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Add Notice Form -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-semibold text-white mb-4">Add New Notice</h3>
-                        <form id="noticeForm" class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Notice Title *</label>
-                                <input 
-                                    type="text" 
-                                    id="noticeTitle" 
-                                    required
-                                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all"
-                                    placeholder="e.g., Important Update"
-                                >
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Notice Content *</label>
-                                <textarea 
-                                    id="noticeContent" 
-                                    rows="3"
-                                    required
-                                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all resize-none"
-                                    placeholder="Enter notice details..."
-                                ></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Priority</label>
-                                <select id="noticePriority" class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition-all">
-                                    <option value="normal" class="bg-gray-800">Normal</option>
-                                    <option value="high" class="bg-gray-800">High Priority</option>
-                                    <option value="urgent" class="bg-gray-800">Urgent</option>
-                                </select>
-                            </div>
-                            <button 
-                                type="submit" 
-                                id="noticeSubmitBtn"
-                                class="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-xl font-semibold text-white transition-all btn-cyber flex items-center justify-center gap-2"
-                            >
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                <span id="noticeBtnText">Publish Notice</span>
-                            </button>
-                        </form>
-                    </div>
-                    
-                    <!-- Current Notices List -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-white mb-4">Active Notices</h3>
-                        <div id="noticesList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-                            <!-- Populated by JS -->
-                        </div>
-                        <div id="emptyNotices" class="hidden text-center py-8 text-gray-500">
-                            <div class="empty-icon w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                                </svg>
-                            </div>
-                            <p>No active notices</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Applicant Management -->
-            <section class="glass-card rounded-2xl overflow-hidden reveal animate">
-                <div class="p-6 border-b border-white/10 flex items-center justify-between flex-wrap gap-4">
-                    <h2 class="font-display text-xl font-bold text-white flex items-center gap-3">
-                        <span class="w-1 h-6 bg-blue-500 rounded-full"></span>
-                        Applicant Management
-                    </h2>
+            <!-- Real-Time Alert Bar -->
+            <div id="alertBar" class="hidden terminal-window rounded-lg p-4 border-red-500 notify-pulse">
+                <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <input 
-                            type="text" 
-                            id="searchApplicants" 
-                            placeholder="Search applicants..." 
-                            class="bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                            oninput="filterApplicants(this.value)"
-                        >
-                        <button onclick="refreshData()" class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors bg-blue-500/10 px-3 py-2 rounded-lg border border-blue-500/20">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                            </svg>
-                            Refresh
-                        </button>
+                        <i class="fas fa-exclamation-triangle text-red-500 text-xl animate-pulse"></i>
+                        <span class="text-red-400 font-bold tracking-wider">NEW_SUBMISSION_DETECTED</span>
                     </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Applicant</th>
-                                <th>Email</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="applicantsTable">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="emptyApplicants" class="hidden p-12 text-center text-gray-500">
-                    <div class="empty-icon w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                        </svg>
-                    </div>
-                    <p>No applications found</p>
-                </div>
-            </section>
-
-            <!-- Resource Manager -->
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 reveal animate">
-                <!-- Add Resource -->
-                <div class="glass-card rounded-2xl p-6 admin-card">
-                    <h2 class="font-display text-xl font-bold text-white mb-6 flex items-center gap-3">
-                        <span class="w-1 h-6 bg-purple-500 rounded-full"></span>
-                        Add Resource
-                    </h2>
-                    
-                    <form id="resourceForm" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">File Name *</label>
-                            <input 
-                                type="text" 
-                                id="fileName" 
-                                required
-                                class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all"
-                                placeholder="e.g., Mathematics Chapter 5"
-                            >
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">File URL *</label>
-                            <input 
-                                type="url" 
-                                id="fileUrl" 
-                                required
-                                class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all"
-                                placeholder="https://example.com/file.pdf"
-                            >
-                            <p class="text-xs text-gray-500 mt-1">Must be a valid URL starting with http:// or https://</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Description (Optional)</label>
-                            <input 
-                                type="text" 
-                                id="fileDesc"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-all"
-                                placeholder="Brief description of the resource"
-                            >
-                        </div>
-                        <button 
-                            type="submit" 
-                            id="resourceSubmitBtn"
-                            class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl font-semibold text-white transition-all btn-cyber flex items-center justify-center gap-2"
-                        >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            <span id="resourceBtnText">Add Resource</span>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Current Resources -->
-                <div class="glass-card rounded-2xl p-6 admin-card">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-display text-xl font-bold text-white flex items-center gap-3">
-                            <span class="w-1 h-6 bg-cyan-500 rounded-full"></span>
-                            Active Resources
-                        </h2>
-                        <span class="text-xs text-gray-400 bg-white/10 px-3 py-1 rounded-full" id="resourceCount">0 items</span>
-                    </div>
-                    
-                    <div id="resourcesList" class="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-                        <!-- Populated by JS -->
-                    </div>
-                    
-                    <div id="emptyResources" class="hidden text-center py-8 text-gray-500">
-                        <div class="empty-icon w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <p>No resources uploaded yet</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quick Actions -->
-            <section class="glass-card rounded-2xl p-6 reveal animate">
-                <h2 class="font-display text-xl font-bold text-white mb-4 flex items-center gap-3">
-                    <span class="w-1 h-6 bg-red-500 rounded-full"></span>
-                    Danger Zone
-                </h2>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="clearAllData()" class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        Clear All Data
-                    </button>
-                    <button onclick="exportData()" class="px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        Export Data
+                    <button onclick="dismissAlert()" class="text-red-400 hover:text-red-300">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
-            </section>
-
-        </main>
-
-        <!-- Footer -->
-        <footer class="border-t border-white/10 py-6 mt-12">
-            <div class="max-w-7xl mx-auto px-4 text-center text-gray-600 text-sm">
-                <p>JM Club Command Center v2.0 | Authorized Personnel Only</p>
-                <p class="mt-1 text-gray-500">Session expires on page reload unless "Remember Me" is implemented</p>
             </div>
-        </footer>
+
+            <!-- Stats Row -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="terminal-window rounded-lg p-4">
+                    <div class="text-xs opacity-70 mb-1">TOTAL_INFILTRATIONS</div>
+                    <div class="text-3xl font-header text-green-400 hacker-text" id="statTotal">0</div>
+                    <div class="progress-bar mt-2 rounded-full">
+                        <div class="progress-fill" id="barTotal" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="terminal-window rounded-lg p-4">
+                    <div class="text-xs opacity-70 mb-1">PENDING_REVIEW</div>
+                    <div class="text-3xl font-header text-amber-400 hacker-text" id="statPending">0</div>
+                    <div class="progress-bar mt-2 rounded-full bg-amber-900/30">
+                        <div class="progress-fill bg-amber-400" id="barPending" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="terminal-window rounded-lg p-4">
+                    <div class="text-xs opacity-70 mb-1">APPROVED_AGENTS</div>
+                    <div class="text-3xl font-header text-green-400 hacker-text" id="statApproved">0</div>
+                    <div class="progress-bar mt-2 rounded-full">
+                        <div class="progress-fill" id="barApproved" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="terminal-window rounded-lg p-4">
+                    <div class="text-xs opacity-70 mb-1">DATA_PACKETS</div>
+                    <div class="text-3xl font-header text-cyan-400 hacker-text" id="statFiles">0</div>
+                    <div class="progress-bar mt-2 rounded-full bg-cyan-900/30">
+                        <div class="progress-fill bg-cyan-400" id="barFiles" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                
+                <!-- Left Column: Notices & Quick Actions -->
+                <div class="space-y-6">
+                    <!-- Broadcast Terminal -->
+                    <div class="terminal-window rounded-lg overflow-hidden">
+                        <div class="terminal-header">
+                            <i class="fas fa-broadcast-tower mr-2"></i>
+                            <span class="text-xs">BROADCAST_TERMINAL.exe</span>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <form id="noticeForm" class="space-y-3">
+                                <input type="text" id="noticeTitle" class="hack-input rounded" placeholder="TRANSMISSION_TITLE" required>
+                                <textarea id="noticeContent" class="hack-input rounded h-24 resize-none" placeholder="MESSAGE_PAYLOAD..." required></textarea>
+                                <select id="noticeLevel" class="hack-input rounded">
+                                    <option value="info">INFO_LEVEL</option>
+                                    <option value="warning">WARNING_LEVEL</option>
+                                    <option value="critical">CRITICAL_LEVEL</option>
+                                </select>
+                                <button type="submit" class="hack-btn hack-btn-cyan w-full py-3 rounded font-bold">
+                                    <i class="fas fa-satellite-dish mr-2"></i> TRANSMIT_NOW
+                                </button>
+                            </form>
+                            
+                            <!-- Active Transmissions -->
+                            <div class="border-t border-green-500/30 pt-4">
+                                <div class="text-xs opacity-70 mb-3 flex justify-between">
+                                    <span>ACTIVE_TRANSMISSIONS</span>
+                                    <span id="noticeCount">0</span>
+                                </div>
+                                <div id="noticeList" class="space-y-2 max-h-[200px] overflow-y-auto pr-2">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Log -->
+                    <div class="terminal-window rounded-lg overflow-hidden">
+                        <div class="terminal-header">
+                            <i class="fas fa-history mr-2"></i>
+                            <span class="text-xs">SYSTEM_LOG.txt</span>
+                        </div>
+                        <div class="p-4">
+                            <div id="systemLog" class="space-y-1 text-xs opacity-70 font-mono max-h-[200px] overflow-y-auto">
+                                <div class="text-green-500">[SYSTEM] Terminal initialized...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Column: Applications (Main Focus) -->
+                <div class="xl:col-span-2 space-y-6">
+                    <!-- Applications Monitor -->
+                    <div class="terminal-window rounded-lg overflow-hidden">
+                        <div class="terminal-header flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-users mr-2"></i>
+                                <span class="text-xs">AGENT_APPLICATIONS.db</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="text" id="searchQuery" placeholder="SEARCH_QUERY..." 
+                                    class="hack-input rounded px-3 py-1 text-xs w-48"
+                                    onkeyup="searchApps(this.value)">
+                                <button onclick="refreshData()" class="hack-btn py-1 px-3 rounded text-xs">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="overflow-x-auto">
+                                <table class="hack-table">
+                                    <thead>
+                                        <tr>
+                                            <th>TIMESTAMP</th>
+                                            <th>AGENT_ID</th>
+                                            <th>IDENTITY</th>
+                                            <th>CONTACT</th>
+                                            <th>STATUS</th>
+                                            <th class="text-right">OPERATIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="appsTable">
+                                        <!-- Real-time populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="emptyApps" class="hidden text-center py-12 text-gray-600">
+                                <i class="fas fa-database text-4xl mb-3 opacity-30"></i>
+                                <p class="text-sm">NO_DATA_RECORDS</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Upload Terminal -->
+                    <div class="terminal-window rounded-lg overflow-hidden">
+                        <div class="terminal-header">
+                            <i class="fas fa-cloud-upload-alt mr-2"></i>
+                            <span class="text-xs">FILE_INJECTION_MODULE.exe</span>
+                        </div>
+                        <div class="p-4 space-y-4">
+                            <!-- Drop Zone -->
+                            <div class="drop-zone rounded-lg" id="dropZone">
+                                <i class="fas fa-file-upload text-4xl mb-3 opacity-50"></i>
+                                <p class="text-sm opacity-70">DROP_FILES_HERE || CLICK_TO_BROWSE</p>
+                                <p class="text-xs opacity-50 mt-2">MAX_SIZE: 50MB | FORMATS: ALL</p>
+                                <input type="file" id="fileInput" class="hidden" multiple>
+                            </div>
+                            
+                            <!-- Upload Progress -->
+                            <div id="uploadProgress" class="hidden space-y-2">
+                                <div class="flex justify-between text-xs">
+                                    <span id="uploadFileName">file.dat</span>
+                                    <span id="uploadPercent">0%</span>
+                                </div>
+                                <div class="progress-bar rounded-full">
+                                    <div class="progress-fill" id="uploadBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- File List -->
+                            <div class="border-t border-green-500/30 pt-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-xs opacity-70">STORED_PACKETS</span>
+                                    <span class="text-xs text-cyan-400" id="fileCount">0 files</span>
+                                </div>
+                                <div id="fileList" class="space-y-2 max-h-[250px] overflow-y-auto pr-2">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal-overlay">
-        <div class="glass-card rounded-2xl p-6 max-w-md w-full mx-4">
-            <h3 class="text-xl font-bold text-white mb-2" id="modalTitle">Confirm Action</h3>
-            <p class="text-gray-400 mb-6" id="modalMessage">Are you sure you want to proceed?</p>
-            <div class="flex gap-3 justify-end">
-                <button onclick="closeModal()" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors">Cancel</button>
-                <button id="modalConfirmBtn" class="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-white transition-colors">Confirm</button>
+    <div id="confirmModal" class="hack-modal">
+        <div class="terminal-window rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="text-center mb-6">
+                <i class="fas fa-question-circle text-5xl text-amber-400 mb-4"></i>
+                <h3 class="font-header text-xl mb-2" id="modalTitle">CONFIRM_ACTION</h3>
+                <p class="text-sm opacity-70" id="modalText">Are you sure?</p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="closeModal()" class="hack-btn flex-1 py-3 rounded">ABORT</button>
+                <button id="modalConfirm" class="hack-btn hack-btn-danger flex-1 py-3 rounded font-bold">EXECUTE</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Debug mode
-        const DEBUG = true;
-        function log(...args) {
-            if (DEBUG) console.log('[JM Admin]', ...args);
-        }
+        // Configuration
+        const CONFIG = {
+            username: '2127',
+            password: 'jm.club',
+            maxFileSize: 50 * 1024 * 1024, // 50MB
+            checkInterval: 1000, // 1 second polling
+            debug: true
+        };
 
-        // Admin Credentials
-        const ADMIN_USER = '2127';
-        const ADMIN_PASS = 'jm.club';
-
-        // Global state
-        let currentApplicants = [];
+        // State
+        let appCheckInterval = null;
+        let lastAppCount = 0;
         let modalCallback = null;
 
-        // Toast Notification System
-        function showToast(message, type = 'info', duration = 3000) {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        ${type === 'success' 
-                            ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>'
-                            : type === 'error'
-                            ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>'
-                            : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
-                        }
-                    </svg>
-                    <span>${message}</span>
-                </div>
-            `;
-            
-            container.appendChild(toast);
-            
-            // Trigger animation
-            requestAnimationFrame(() => {
-                toast.classList.add('show');
-            });
-            
-            // Remove after duration
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-
-        // Scroll Reveal
-        const initScrollReveal = () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.reveal.animate, .reveal-scale.animate').forEach(el => {
-                observer.observe(el);
-            });
-        };
-
-        // Login Handler - FIXED
-        const initLogin = () => {
-            const loginForm = document.getElementById('loginForm');
-            const loginOverlay = document.getElementById('loginOverlay');
-            const adminInterface = document.getElementById('adminInterface');
-            const loginError = document.getElementById('loginError');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-
-            // Check existing session
-            if (sessionStorage.getItem('admin_session') === 'active') {
-                log('Restoring session');
-                loginOverlay.classList.add('hidden');
-                adminInterface.classList.remove('hidden');
-                initScrollReveal();
-                loadAllData();
-                return;
-            }
-
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const username = document.getElementById('username').value.trim();
-                const password = document.getElementById('password').value;
-                
-                // Validation
-                let hasError = false;
-                
-                if (!username) {
-                    document.getElementById('username').classList.add('input-error');
-                    document.getElementById('usernameError').classList.add('show');
-                    hasError = true;
-                } else {
-                    document.getElementById('username').classList.remove('input-error');
-                    document.getElementById('usernameError').classList.remove('show');
-                }
-                
-                if (!password) {
-                    document.getElementById('password').classList.add('input-error');
-                    document.getElementById('passwordError').classList.add('show');
-                    hasError = true;
-                } else {
-                    document.getElementById('password').classList.remove('input-error');
-                    document.getElementById('passwordError').classList.remove('show');
-                }
-                
-                if (hasError) return;
-
-                // Show loading
-                loginBtn.disabled = true;
-                loginBtnText.textContent = 'Authenticating...';
-                loginSpinner.classList.remove('hidden');
-
-                // Simulate network delay for realism
-                await new Promise(r => setTimeout(r, 800));
-
-                if (username === ADMIN_USER && password === ADMIN_PASS) {
-                    log('Login successful');
-                    sessionStorage.setItem('admin_session', 'active');
-                    loginOverlay.classList.add('hidden');
-                    adminInterface.classList.remove('hidden');
-                    
-                    // Trigger entrance animations
-                    document.querySelectorAll('.reveal.animate, .reveal-scale.animate').forEach(el => {
-                        el.classList.add('active');
-                    });
-                    
-                    initScrollReveal();
-                    loadAllData();
-                    showToast('Welcome back, Administrator', 'success');
-                } else {
-                    log('Login failed');
-                    loginError.classList.remove('hidden');
-                    loginBtn.disabled = false;
-                    loginBtnText.textContent = 'Initialize Access';
-                    loginSpinner.classList.add('hidden');
-                    
-                    // Shake animation
-                    loginOverlay.querySelector('.glass-card').animate([
-                        { transform: 'translateX(0)' },
-                        { transform: 'translateX(-10px)' },
-                        { transform: 'translateX(10px)' },
-                        { transform: 'translateX(0)' }
-                    ], { duration: 300 });
-                    
-                    setTimeout(() => loginError.classList.add('hidden'), 3000);
-                }
-            });
-
-            // Real-time validation removal
-            document.getElementById('username').addEventListener('input', function() {
-                if (this.value.trim()) {
-                    this.classList.remove('input-error');
-                    document.getElementById('usernameError').classList.remove('show');
-                }
-            });
-            
-            document.getElementById('password').addEventListener('input', function() {
-                if (this.value) {
-                    this.classList.remove('input-error');
-                    document.getElementById('passwordError').classList.remove('show');
-                }
-            });
-        };
-
-        // Logout
-        function logout() {
-            showModal(
-                'Confirm Logout',
-                'Are you sure you want to end your session?',
-                () => {
-                    sessionStorage.removeItem('admin_session');
-                    showToast('Logged out successfully', 'info');
-                    setTimeout(() => location.reload(), 1000);
-                }
-            );
-        }
-
-        // Load All Data
-        const loadAllData = () => {
-            try {
-                updateStats();
-                loadApplicants();
-                loadResources();
-                loadNotices();
-                log('All data loaded successfully');
-            } catch (e) {
-                log('Error loading data:', e);
-                showToast('Error loading some data', 'error');
-            }
-        };
-
-        // Update Statistics
-        const updateStats = () => {
-            try {
-                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
-                const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
-                
-                const pending = apps.filter(a => a.status === 'pending').length;
-                const approved = apps.filter(a => a.status === 'member').length;
-
-                document.getElementById('totalApps').textContent = apps.length;
-                document.getElementById('pendingApps').textContent = pending;
-                document.getElementById('approvedApps').textContent = approved;
-                document.getElementById('totalFiles').textContent = files.length;
-                
-                log('Stats updated:', { apps: apps.length, pending, approved, files: files.length, notices: notices.length });
-            } catch (e) {
-                log('Stats update error:', e);
-            }
-        };
-
-        // Load Applicants Table - FIXED with search
-        const loadApplicants = (searchTerm = '') => {
-            try {
-                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                const tbody = document.getElementById('applicantsTable');
-                const emptyState = document.getElementById('emptyApplicants');
-                
-                currentApplicants = apps;
-
-                // Filter by search
-                let filteredApps = apps;
-                if (searchTerm) {
-                    const term = searchTerm.toLowerCase();
-                    filteredApps = apps.filter(app => {
-                        const fullName = `${app.firstName} ${app.middleName || ''} ${app.lastName}`.toLowerCase();
-                        return fullName.includes(term) || app.email.toLowerCase().includes(term);
-                    });
-                }
-
-                if (filteredApps.length === 0) {
-                    tbody.innerHTML = '';
-                    emptyState.classList.remove('hidden');
-                    return;
-                }
-
-                emptyState.classList.add('hidden');
-                
-                tbody.innerHTML = filteredApps.map((app) => {
-                    const date = new Date(app.date).toLocaleDateString();
-                    const fullName = `${app.firstName} ${app.middleName ? app.middleName + ' ' : ''}${app.lastName}`;
-                    
-                    let statusClass = 'badge-pending';
-                    let statusText = 'Pending';
-                    if (app.status === 'member') {
-                        statusClass = 'badge-approved';
-                        statusText = 'Approved';
-                    } else if (app.status === 'rejected') {
-                        statusClass = 'badge-rejected';
-                        statusText = 'Rejected';
-                    }
-
-                    return `
-                        <tr class="transition-colors">
-                            <td>
-                                <div class="font-medium text-white">${escapeHtml(fullName)}</div>
-                                <div class="text-xs text-gray-500 mt-1">${escapeHtml(app.reason || 'No additional info')}</div>
-                            </td>
-                            <td class="text-gray-400">${escapeHtml(app.email)}</td>
-                            <td class="text-gray-400">${date}</td>
-                            <td>
-                                <span class="px-3 py-1 rounded-full text-xs font-medium ${statusClass}">
-                                    ${statusText}
-                                </span>
-                            </td>
-                            <td class="text-right">
-                                <div class="flex items-center justify-end gap-2 flex-wrap">
-                                    <button onclick="updateStatus(${app.id}, 'member')" 
-                                        class="px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 text-green-400 rounded-lg text-xs font-medium transition-all border border-green-500/20 ${app.status === 'member' ? 'opacity-50 cursor-not-allowed' : ''}"
-                                        ${app.status === 'member' ? 'disabled' : ''}>
-                                        Approve
-                                    </button>
-                                    <button onclick="updateStatus(${app.id}, 'rejected')" 
-                                        class="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-medium transition-all border border-red-500/20 ${app.status === 'rejected' ? 'opacity-50 cursor-not-allowed' : ''}"
-                                        ${app.status === 'rejected' ? 'disabled' : ''}>
-                                        Reject
-                                    </button>
-                                    <button onclick="viewApplication(${app.id})" 
-                                        class="px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg text-xs font-medium transition-all border border-blue-500/20">
-                                        View
-                                    </button>
-                                    <button onclick="deleteApplication(${app.id})" 
-                                        class="px-3 py-1.5 bg-gray-500/10 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-lg text-xs font-medium transition-all border border-gray-500/20">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-            } catch (e) {
-                log('Load applicants error:', e);
-                showToast('Error loading applicants', 'error');
-            }
-        };
-
-        // Filter applicants
-        function filterApplicants(searchTerm) {
-            loadApplicants(searchTerm);
-        }
-
-        // View Application Details
-        function viewApplication(id) {
-            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-            const app = apps.find(a => a.id === id);
-            if (!app) return;
-            
-            const fullName = `${app.firstName} ${app.middleName ? app.middleName + ' ' : ''}${app.lastName}`;
-            const date = new Date(app.date).toLocaleString();
-            
-            showModal(
-                'Application Details',
-                `
-                    <div class="space-y-2 text-left">
-                        <p><strong class="text-blue-400">Name:</strong> ${escapeHtml(fullName)}</p>
-                        <p><strong class="text-blue-400">Email:</strong> ${escapeHtml(app.email)}</p>
-                        <p><strong class="text-blue-400">Submitted:</strong> ${date}</p>
-                        <p><strong class="text-blue-400">Status:</strong> ${app.status}</p>
-                        <p><strong class="text-blue-400">Reason:</strong> ${escapeHtml(app.reason || 'N/A')}</p>
-                    </div>
-                `,
-                null,
-                'Close'
-            );
-        }
-
-        // Update Application Status - FIXED
-        function updateStatus(id, status) {
-            try {
-                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                const appIndex = apps.findIndex(a => a.id === id);
-                
-                if (appIndex === -1) {
-                    showToast('Application not found', 'error');
-                    return;
-                }
-                
-                const app = apps[appIndex];
-                const oldStatus = app.status;
-                app.status = status;
-                
-                // Save back to localStorage
-                localStorage.setItem('jm_apps', JSON.stringify(apps));
-                
-                // Update global status if this is the current user (simplified logic)
-                // In real app, you'd map by email or user ID
-                
-                log(`Status updated: ${app.firstName} ${app.lastName} from ${oldStatus} to ${status}`);
-                
-                // Refresh display
-                loadApplicants();
-                updateStats();
-                
-                const action = status === 'member' ? 'approved' : 'rejected';
-                showToast(`Application ${action} successfully`, 'success');
-                
-            } catch (e) {
-                log('Update status error:', e);
-                showToast('Error updating status', 'error');
-            }
-        }
-
-        // Delete Application - FIXED with confirmation
-        function deleteApplication(id) {
-            showModal(
-                'Delete Application',
-                'Are you sure you want to permanently delete this application? This action cannot be undone.',
-                () => {
-                    try {
-                        let apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                        const app = apps.find(a => a.id === id);
-                        apps = apps.filter(a => a.id !== id);
-                        localStorage.setItem('jm_apps', JSON.stringify(apps));
-                        
-                        loadApplicants();
-                        updateStats();
-                        showToast('Application deleted', 'success');
-                        log('Deleted application:', app?.firstName);
-                    } catch (e) {
-                        log('Delete error:', e);
-                        showToast('Error deleting application', 'error');
-                    }
-                }
-            );
-        }
-
-        // Notice Board Management - NEW
-        const initNoticeForm = () => {
-            const form = document.getElementById('noticeForm');
-            
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                try {
-                    const title = document.getElementById('noticeTitle').value.trim();
-                    const content = document.getElementById('noticeContent').value.trim();
-                    const priority = document.getElementById('noticePriority').value;
-                    
-                    if (!title || !content) {
-                        showToast('Please fill in all required fields', 'error');
-                        return;
-                    }
-                    
-                    const notice = {
-                        id: Date.now(),
-                        title: title,
-                        content: content,
-                        priority: priority,
-                        date: new Date().toISOString(),
-                        active: true
-                    };
-                    
-                    const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
-                    notices.unshift(notice); // Add to top
-                    localStorage.setItem('jm_notices', JSON.stringify(notices));
-                    
-                    form.reset();
-                    loadNotices();
-                    showToast('Notice published successfully', 'success');
-                    log('Notice added:', title);
-                    
-                } catch (e) {
-                    log('Add notice error:', e);
-                    showToast('Error publishing notice', 'error');
-                }
-            });
-        };
-
-        // Load Notices
-        function loadNotices() {
-            try {
-                const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
-                const list = document.getElementById('noticesList');
-                const empty = document.getElementById('emptyNotices');
-                
-                if (notices.length === 0) {
-                    list.innerHTML = '';
-                    empty.classList.remove('hidden');
-                    return;
-                }
-                
-                empty.classList.add('hidden');
-                
-                list.innerHTML = notices.map(notice => {
-                    const date = new Date(notice.date).toLocaleDateString();
-                    let priorityColor = 'bg-blue-500';
-                    let priorityText = 'Normal';
-                    
-                    if (notice.priority === 'high') {
-                        priorityColor = 'bg-yellow-500';
-                        priorityText = 'High';
-                    } else if (notice.priority === 'urgent') {
-                        priorityColor = 'bg-red-500';
-                        priorityText = 'Urgent';
-                    }
-                    
-                    return `
-                        <div class="glass-card rounded-xl p-4 border-l-4 ${notice.priority === 'urgent' ? 'border-red-500' : notice.priority === 'high' ? 'border-yellow-500' : 'border-blue-500'}">
-                            <div class="flex items-start justify-between mb-2">
-                                <div>
-                                    <h4 class="font-semibold text-white">${escapeHtml(notice.title)}</h4>
-                                    <span class="text-xs text-gray-500">${date}</span>
-                                </div>
-                                <span class="px-2 py-1 ${priorityColor}/20 text-${priorityColor.replace('bg-', '')}-400 rounded text-xs font-medium">
-                                    ${priorityText}
-                                </span>
-                            </div>
-                            <p class="text-sm text-gray-400 mb-3">${escapeHtml(notice.content)}</p>
-                            <div class="flex gap-2">
-                                <button onclick="deleteNotice(${notice.id})" class="text-xs text-red-400 hover:text-red-300 transition-colors">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                
-            } catch (e) {
-                log('Load notices error:', e);
-            }
-        }
-
-        // Delete Notice
-        function deleteNotice(id) {
-            showModal(
-                'Delete Notice',
-                'Remove this notice from the board?',
-                () => {
-                    try {
-                        let notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
-                        notices = notices.filter(n => n.id !== id);
-                        localStorage.setItem('jm_notices', JSON.stringify(notices));
-                        loadNotices();
-                        showToast('Notice deleted', 'success');
-                    } catch (e) {
-                        showToast('Error deleting notice', 'error');
-                    }
-                }
-            );
-        }
-
-        function refreshNotices() {
-            loadNotices();
-            showToast('Notices refreshed', 'info');
-        }
-
-        // Resource Form Handler - FIXED
-        const initResourceForm = () => {
-            const form = document.getElementById('resourceForm');
-            const submitBtn = document.getElementById('resourceSubmitBtn');
-            const btnText = document.getElementById('resourceBtnText');
-            
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                try {
-                    const name = document.getElementById('fileName').value.trim();
-                    const url = document.getElementById('fileUrl').value.trim();
-                    const desc = document.getElementById('fileDesc').value.trim();
-                    
-                    // Validation
-                    if (!name || !url) {
-                        showToast('Please fill in all required fields', 'error');
-                        return;
-                    }
-                    
-                    // URL validation
-                    try {
-                        new URL(url);
-                    } catch {
-                        showToast('Please enter a valid URL', 'error');
-                        return;
-                    }
-                    
-                    // Show loading
-                    submitBtn.disabled = true;
-                    btnText.textContent = 'Adding...';
-                    
-                    const newFile = {
-                        id: Date.now(),
-                        name: name,
-                        url: url,
-                        description: desc,
-                        date: new Date().toISOString()
-                    };
-                    
-                    const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
-                    files.push(newFile);
-                    localStorage.setItem('jm_files', JSON.stringify(files));
-                    
-                    // Simulate network delay
-                    await new Promise(r => setTimeout(r, 500));
-                    
-                    form.reset();
-                    loadResources();
-                    updateStats();
-                    showToast('Resource added successfully', 'success');
-                    log('Resource added:', name);
-                    
-                } catch (e) {
-                    log('Add resource error:', e);
-                    showToast('Error adding resource', 'error');
-                } finally {
-                    submitBtn.disabled = false;
-                    btnText.textContent = 'Add Resource';
-                }
-            });
-        };
-
-        // Load Resources List - FIXED
-        function loadResources() {
-            try {
-                const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
-                const list = document.getElementById('resourcesList');
-                const empty = document.getElementById('emptyResources');
-                const count = document.getElementById('resourceCount');
-
-                count.textContent = `${files.length} item${files.length !== 1 ? 's' : ''}`;
-
-                if (files.length === 0) {
-                    list.innerHTML = '';
-                    empty.classList.remove('hidden');
-                    return;
-                }
-
-                empty.classList.add('hidden');
-                
-                list.innerHTML = files.map(file => `
-                    <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all group">
-                        <div class="flex items-center gap-3 min-w-0 flex-1">
-                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="min-w-0 flex-1">
-                                <h4 class="font-medium text-white truncate" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</h4>
-                                <p class="text-xs text-gray-500 truncate">${escapeHtml(file.description || file.url)}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <a href="${escapeHtml(file.url)}" target="_blank" rel="noopener noreferrer" 
-                               class="p-2 hover:bg-blue-500/20 rounded-lg text-blue-400 transition-colors" title="Open">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </a>
-                            <button onclick="deleteResource(${file.id})" 
-                                class="p-2 hover:bg-red-500/20 rounded-lg text-red-400 transition-colors" title="Delete">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-                
-            } catch (e) {
-                log('Load resources error:', e);
-                showToast('Error loading resources', 'error');
-            }
-        }
-
-        // Delete Resource - FIXED
-        function deleteResource(id) {
-            showModal(
-                'Delete Resource',
-                'Are you sure you want to remove this resource? It will no longer appear on the main portal.',
-                () => {
-                    try {
-                        let files = JSON.parse(localStorage.getItem('jm_files') || '[]');
-                        const file = files.find(f => f.id === id);
-                        files = files.filter(f => f.id !== id);
-                        localStorage.setItem('jm_files', JSON.stringify(files));
-                        loadResources();
-                        updateStats();
-                        showToast('Resource deleted', 'success');
-                        log('Deleted resource:', file?.name);
-                    } catch (e) {
-                        log('Delete resource error:', e);
-                        showToast('Error deleting resource', 'error');
-                    }
-                }
-            );
-        }
-
-        // Refresh Data
-        function refreshData() {
-            loadAllData();
-            showToast('Data refreshed', 'info');
-        }
-
-        // Modal System
-        function showModal(title, message, onConfirm, confirmText = 'Confirm') {
-            const modal = document.getElementById('confirmModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalMessage = document.getElementById('modalMessage');
-            const confirmBtn = document.getElementById('modalConfirmBtn');
-            
-            modalTitle.textContent = title;
-            modalMessage.innerHTML = message;
-            confirmBtn.textContent = confirmText;
-            
-            modalCallback = onConfirm;
-            
-            if (onConfirm) {
-                confirmBtn.onclick = () => {
-                    closeModal();
-                    onConfirm();
-                };
-                confirmBtn.classList.remove('hidden');
-            } else {
-                confirmBtn.classList.add('hidden');
-            }
-            
-            modal.classList.add('active');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('confirmModal');
-            modal.classList.remove('active');
-            modalCallback = null;
-        }
-
-        // Close modal on overlay click
-        document.getElementById('confirmModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                closeModal();
-            }
-        });
-
-        // Danger Zone Functions
-        function clearAllData() {
-            showModal(
-                '⚠️ Clear All Data',
-                'This will permanently delete ALL applications, resources, and notices. This action cannot be undone!',
-                () => {
-                    try {
-                        localStorage.removeItem('jm_apps');
-                        localStorage.removeItem('jm_files');
-                        localStorage.removeItem('jm_notices');
-                        localStorage.removeItem('jm_status');
-                        loadAllData();
-                        showToast('All data cleared', 'success');
-                        log('All data cleared by admin');
-                    } catch (e) {
-                        showToast('Error clearing data', 'error');
-                    }
-                },
-                'Yes, Clear Everything'
-            );
-        }
-
-        function exportData() {
-            try {
-                const data = {
-                    applications: JSON.parse(localStorage.getItem('jm_apps') || '[]'),
-                    resources: JSON.parse(localStorage.getItem('jm_files') || '[]'),
-                    notices: JSON.parse(localStorage.getItem('jm_notices') || '[]'),
-                    exportedAt: new Date().toISOString()
-                };
-                
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `jm-club-backup-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showToast('Data exported successfully', 'success');
-                log('Data exported');
-            } catch (e) {
-                showToast('Error exporting data', 'error');
-                log('Export error:', e);
-            }
-        }
-
-        // Utility: Escape HTML
+        // Utilities
+        const log = (...args) => CONFIG.debug && console.log('[ROOT]', ...args);
+        
+        const now = () => new Date().toLocaleTimeString('en-US', { hour12: false });
+        
+        const generateId = () => Math.random().toString(36).substr(2, 9).toUpperCase();
+        
         const escapeHtml = (text) => {
-            if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         };
 
-        // Initialize Everything
-        document.addEventListener('DOMContentLoaded', () => {
-            log('Initializing Admin Command Center...');
+        // Toast System
+        const toast = (msg, type = 'normal') => {
+            const container = document.getElementById('toastContainer');
+            const el = document.createElement('div');
+            el.className = `hack-toast ${type === 'alert' ? 'alert' : ''}`;
+            el.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-${type === 'alert' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <div>
+                        <div class="font-bold text-xs mb-1">${type === 'alert' ? 'ALERT' : 'NOTIFICATION'}</div>
+                        <div class="text-sm">${msg}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(el);
+            requestAnimationFrame(() => el.classList.add('show'));
+            setTimeout(() => {
+                el.classList.remove('show');
+                setTimeout(() => el.remove(), 300);
+            }, 5000);
+        };
+
+        // System Logger
+        const logSystem = (msg) => {
+            const logEl = document.getElementById('systemLog');
+            const entry = document.createElement('div');
+            entry.className = 'text-green-500';
+            entry.innerHTML = `<span class="opacity-50">[${now()}]</span> ${msg}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
             
-            try {
-                initLogin();
-                initResourceForm();
-                initNoticeForm();
-                
-                log('Admin initialization complete');
-            } catch (e) {
-                log('Initialization error:', e);
-                showToast('Error initializing admin panel', 'error');
+            // Keep only last 50 entries
+            while (logEl.children.length > 50) {
+                logEl.removeChild(logEl.firstChild);
             }
+        };
+
+        // Clock
+        const updateClock = () => {
+            document.getElementById('clock').textContent = now();
+        };
+        setInterval(updateClock, 1000);
+
+        // Matrix Background
+        const initMatrix = () => {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.05';
+            document.body.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+            const drops = [];
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            
+            for (let i = 0; i < columns; i++) drops[i] = 1;
+            
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            };
+            
+            setInterval(draw, 35);
+        };
+
+        // Hex Background
+        const initHexBg = () => {
+            const el = document.getElementById('hexBg');
+            let hex = '';
+            for (let i = 0; i < 1000; i++) {
+                hex += Math.random().toString(16).substr(2, 2) + ' ';
+                if (i % 32 === 0) hex += '<br>';
+            }
+            el.innerHTML = hex;
+        };
+
+        // Login System
+        const initLogin = () => {
+            if (sessionStorage.getItem('root') === 'active') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                startMonitoring();
+                loadAll();
+                return;
+            }
+            
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const u = document.getElementById('username').value;
+                const p = document.getElementById('password').value;
+                
+                if (u === CONFIG.username && p === CONFIG.password) {
+                    sessionStorage.setItem('root', 'active');
+                    document.getElementById('loginScreen').classList.add('hidden');
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    startMonitoring();
+                    loadAll();
+                    toast('ROOT ACCESS GRANTED');
+                    logSystem('Administrator authenticated');
+                } else {
+                    document.getElementById('loginError').classList.remove('hidden');
+                    setTimeout(() => document.getElementById('loginError').classList.add('hidden'), 3000);
+                    logSystem('Authentication failed');
+                }
+            });
+        };
+
+        // Logout
+        const logout = () => {
+            showModal('TERMINATE_SESSION', 'End administrator session?', () => {
+                sessionStorage.removeItem('root');
+                location.reload();
+            });
+        };
+
+        // Real-time Monitoring
+        const startMonitoring = () => {
+            // Check for new applications every second
+            appCheckInterval = setInterval(() => {
+                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+                
+                if (apps.length > lastAppCount) {
+                    const newApps = apps.length - lastAppCount;
+                    lastAppCount = apps.length;
+                    
+                    // Alert
+                    const alertBar = document.getElementById('alertBar');
+                    alertBar.classList.remove('hidden');
+                    alertBar.querySelector('span').textContent = `${newApps} NEW_SUBMISSION${newApps > 1 ? 'S' : ''}_DETECTED`;
+                    
+                    // Sound effect (visual only)
+                    document.body.style.animation = 'none';
+                    document.body.offsetHeight; // Trigger reflow
+                    document.body.style.animation = 'flicker 0.1s 3';
+                    
+                    toast(`${newApps} new application${newApps > 1 ? 's' : ''} received!`, 'alert');
+                    logSystem(`Detected ${newApps} new submission(s)`);
+                    
+                    // Refresh display
+                    loadApps();
+                    updateStats();
+                }
+            }, CONFIG.checkInterval);
+        };
+
+        const dismissAlert = () => {
+            document.getElementById('alertBar').classList.add('hidden');
+        };
+
+        // Update Statistics
+        const updateStats = () => {
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            
+            const pending = apps.filter(a => a.status === 'pending').length;
+            const approved = apps.filter(a => a.status === 'member').length;
+            
+            // Animate numbers
+            animateNumber('statTotal', apps.length);
+            animateNumber('statPending', pending);
+            animateNumber('statApproved', approved);
+            animateNumber('statFiles', files.length);
+            
+            // Update bars
+            const max = Math.max(apps.length, 1);
+            document.getElementById('barTotal').style.width = '100%';
+            document.getElementById('barPending').style.width = `${(pending/max)*100}%`;
+            document.getElementById('barApproved').style.width = `${(approved/max)*100}%`;
+            document.getElementById('barFiles').style.width = `${Math.min(files.length * 10, 100)}%`;
+        };
+
+        const animateNumber = (id, target) => {
+            const el = document.getElementById(id);
+            const current = parseInt(el.textContent);
+            const diff = target - current;
+            if (diff === 0) return;
+            
+            const step = diff > 0 ? 1 : -1;
+            const timer = setInterval(() => {
+                const val = parseInt(el.textContent) + step;
+                el.textContent = val;
+                if (val === target) clearInterval(timer);
+            }, 20);
+        };
+
+        // Load Applications
+        const loadApps = (search = '') => {
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            const tbody = document.getElementById('appsTable');
+            const empty = document.getElementById('emptyApps');
+            
+            lastAppCount = apps.length;
+            
+            let filtered = apps;
+            if (search) {
+                const q = search.toLowerCase();
+                filtered = apps.filter(a => 
+                    `${a.firstName} ${a.lastName}`.toLowerCase().includes(q) ||
+                    a.email.toLowerCase().includes(q) ||
+                    a.id.toLowerCase().includes(q)
+                );
+            }
+            
+            // Sort by date (newest first)
+            filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            
+            tbody.innerHTML = filtered.map(app => {
+                const date = new Date(app.date);
+                const timeStr = date.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const fullName = `${app.firstName} ${app.middleName ? app.middleName + ' ' : ''}${app.lastName}`;
+                
+                let statusClass = 'status-pending';
+                let statusText = 'PENDING';
+                if (app.status === 'member') {
+                    statusClass = 'status-approved';
+                    statusText = 'APPROVED';
+                } else if (app.status === 'rejected') {
+                    statusClass = 'status-rejected';
+                    statusText = 'REJECTED';
+                }
+                
+                return `
+                    <tr class="group">
+                        <td class="font-mono text-xs opacity-70">
+                            <div>${dateStr}</div>
+                            <div class="text-[10px]">${timeStr}</div>
+                        </td>
+                        <td class="font-mono text-xs text-cyan-400">${app.id.substr(0, 8).toUpperCase()}</td>
+                        <td>
+                            <div class="font-bold text-sm">${escapeHtml(fullName)}</div>
+                            <div class="text-xs opacity-50 truncate max-w-[200px]">${escapeHtml(app.reason || 'No notes')}</div>
+                        </td>
+                        <td class="text-xs">${escapeHtml(app.email)}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td class="text-right">
+                            <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                ${app.status !== 'member' ? `
+                                    <button onclick="approveApp('${app.id}')" class="hack-btn hack-btn-success py-1 px-3 rounded text-xs" title="APPROVE">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                                ${app.status !== 'rejected' ? `
+                                    <button onclick="rejectApp('${app.id}')" class="hack-btn hack-btn-danger py-1 px-3 rounded text-xs" title="REJECT">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                ` : ''}
+                                <button onclick="viewApp('${app.id}')" class="hack-btn py-1 px-3 rounded text-xs" title="VIEW">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button onclick="deleteApp('${app.id}')" class="hack-btn hack-btn-danger py-1 px-3 rounded text-xs" title="DELETE">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        };
+
+        const searchApps = (query) => {
+            loadApps(query);
+        };
+
+        // Application Actions
+        const approveApp = (id) => {
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            const app = apps.find(a => a.id === id);
+            if (app) {
+                app.status = 'member';
+                localStorage.setItem('jm_apps', JSON.stringify(apps));
+                loadApps();
+                updateStats();
+                toast(`Agent ${app.firstName} APPROVED`);
+                logSystem(`Approved application ${id.substr(0, 8)}`);
+            }
+        };
+
+        const rejectApp = (id) => {
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            const app = apps.find(a => a.id === id);
+            if (app) {
+                app.status = 'rejected';
+                localStorage.setItem('jm_apps', JSON.stringify(apps));
+                loadApps();
+                updateStats();
+                toast(`Agent ${app.firstName} REJECTED`, 'alert');
+                logSystem(`Rejected application ${id.substr(0, 8)}`);
+            }
+        };
+
+        const viewApp = (id) => {
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            const app = apps.find(a => a.id === id);
+            if (!app) return;
+            
+            const fullName = `${app.firstName} ${app.middleName ? app.middleName + ' ' : ''}${app.lastName}`;
+            
+            showModal(
+                'AGENT_DOSSIER',
+                `
+                    <div class="text-left space-y-2 text-sm">
+                        <div><span class="text-cyan-400">ID:</span> ${app.id.toUpperCase()}</div>
+                        <div><span class="text-cyan-400">NAME:</span> ${escapeHtml(fullName)}</div>
+                        <div><span class="text-cyan-400">EMAIL:</span> ${escapeHtml(app.email)}</div>
+                        <div><span class="text-cyan-400">STATUS:</span> ${app.status.toUpperCase()}</div>
+                        <div><span class="text-cyan-400">SUBMITTED:</span> ${new Date(app.date).toLocaleString()}</div>
+                        <div class="mt-4 p-3 bg-black/50 rounded border border-green-500/30">
+                            <div class="text-cyan-400 mb-1">MISSION_STATEMENT:</div>
+                            <div class="opacity-80">${escapeHtml(app.reason || 'No data provided')}</div>
+                        </div>
+                    </div>
+                `,
+                null,
+                'CLOSE'
+            );
+        };
+
+        const deleteApp = (id) => {
+            showModal(
+                'PURGE_RECORD',
+                'Permanently delete this application? This cannot be undone.',
+                () => {
+                    let apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+                    apps = apps.filter(a => a.id !== id);
+                    localStorage.setItem('jm_apps', JSON.stringify(apps));
+                    loadApps();
+                    updateStats();
+                    toast('Record purged');
+                    logSystem(`Deleted application ${id.substr(0, 8)}`);
+                }
+            );
+        };
+
+        // Notice Management
+        const initNotices = () => {
+            document.getElementById('noticeForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const notice = {
+                    id: generateId(),
+                    title: document.getElementById('noticeTitle').value,
+                    content: document.getElementById('noticeContent').value,
+                    level: document.getElementById('noticeLevel').value,
+                    date: new Date().toISOString()
+                };
+                
+                const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+                notices.unshift(notice);
+                localStorage.setItem('jm_notices', JSON.stringify(notices));
+                
+                document.getElementById('noticeForm').reset();
+                loadNotices();
+                toast('Transmission broadcasted successfully');
+                logSystem(`Broadcasted notice: ${notice.title}`);
+            });
+        };
+
+        const loadNotices = () => {
+            const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            const list = document.getElementById('noticeList');
+            
+            document.getElementById('noticeCount').textContent = notices.length;
+            
+            if (notices.length === 0) {
+                list.innerHTML = '<div class="text-xs opacity-50 text-center py-4">NO_ACTIVE_TRANSMISSIONS</div>';
+                return;
+            }
+            
+            list.innerHTML = notices.map(n => {
+                const colors = {
+                    info: 'border-cyan-500 bg-cyan-500/10 text-cyan-400',
+                    warning: 'border-amber-500 bg-amber-500/10 text-amber-400',
+                    critical: 'border-red-500 bg-red-500/10 text-red-400'
+                };
+                const color = colors[n.level] || colors.info;
+                
+                return `
+                    <div class="border-l-2 ${color} p-2 rounded-r text-xs group">
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold">${escapeHtml(n.title)}</span>
+                            <button onclick="deleteNotice('${n.id}')" class="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-opacity">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="opacity-70 truncate">${escapeHtml(n.content)}</div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        const deleteNotice = (id) => {
+            let notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            notices = notices.filter(n => n.id !== id);
+            localStorage.setItem('jm_notices', JSON.stringify(notices));
+            loadNotices();
+            toast('Transmission terminated');
+        };
+
+        // File Upload System - NO URL NEEDED
+        const initFileUpload = () => {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            
+            // Click to browse
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            // File selection
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+            
+            // Drag and drop
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+        };
+
+        const handleFiles = (files) => {
+            Array.from(files).forEach(file => {
+                if (file.size > CONFIG.maxFileSize) {
+                    toast(`File ${file.name} exceeds 50MB limit`, 'alert');
+                    return;
+                }
+                
+                // Simulate upload with progress
+                const progressDiv = document.getElementById('uploadProgress');
+                const fileName = document.getElementById('uploadFileName');
+                const percent = document.getElementById('uploadPercent');
+                const bar = document.getElementById('uploadBar');
+                
+                progressDiv.classList.remove('hidden');
+                fileName.textContent = file.name;
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 100) progress = 100;
+                    
+                    bar.style.width = `${progress}%`;
+                    percent.textContent = `${Math.floor(progress)}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressDiv.classList.add('hidden');
+                            saveFile(file);
+                        }, 500);
+                    }
+                }, 100);
+            });
+        };
+
+        const saveFile = (file) => {
+            // Create object URL for the file (no external URL needed!)
+            const url = URL.createObjectURL(file);
+            
+            const fileData = {
+                id: generateId(),
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                url: url, // Local blob URL
+                date: new Date().toISOString()
+            };
+            
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            files.push(fileData);
+            localStorage.setItem('jm_files', JSON.stringify(files));
+            
+            loadFiles();
+            updateStats();
+            toast(`File ${file.name} uploaded successfully`);
+            logSystem(`Uploaded file: ${file.name} (${(file.size/1024).toFixed(1)}KB)`);
+        };
+
+        const loadFiles = () => {
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            const list = document.getElementById('fileList');
+            const empty = document.getElementById('emptyRes');
+            
+            document.getElementById('fileCount').textContent = `${files.length} file${files.length !== 1 ? 's' : ''}`;
+            
+            if (files.length === 0) {
+                list.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            
+            list.innerHTML = files.map(f => {
+                const size = f.size ? (f.size/1024).toFixed(1) + ' KB' : 'Unknown';
+                const icon = f.type?.includes('image') ? 'fa-image' : 
+                            f.type?.includes('pdf') ? 'fa-file-pdf' : 
+                            f.type?.includes('video') ? 'fa-video' : 'fa-file';
+                
+                return `
+                    <div class="flex items-center justify-between p-3 bg-black/30 rounded border border-green-500/20 group hover:border-green-500/50 transition-colors">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-10 h-10 bg-cyan-500/10 rounded flex items-center justify-center flex-shrink-0">
+                                <i class="fas ${icon} text-cyan-400"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-sm font-medium truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
+                                <div class="text-xs opacity-50">${size} • ${new Date(f.date).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="${f.url}" download="${f.name}" class="hack-btn py-1 px-3 rounded text-xs" title="DOWNLOAD">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button onclick="deleteFile('${f.id}')" class="hack-btn hack-btn-danger py-1 px-3 rounded text-xs" title="DELETE">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        const deleteFile = (id) => {
+            showModal(
+                'DELETE_PACKET',
+                'Remove this file from the database?',
+                () => {
+                    let files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+                    const file = files.find(f => f.id === id);
+                    if (file && file.url) URL.revokeObjectURL(file.url); // Clean up blob URL
+                    
+                    files = files.filter(f => f.id !== id);
+                    localStorage.setItem('jm_files', JSON.stringify(files));
+                    loadFiles();
+                    updateStats();
+                    toast('File deleted');
+                    logSystem(`Deleted file: ${file?.name}`);
+                }
+            );
+        };
+
+        // Modal System
+        const showModal = (title, text, callback, confirmText = 'EXECUTE') => {
+            const modal = document.getElementById('confirmModal');
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalText').innerHTML = text;
+            document.getElementById('modalConfirm').textContent = confirmText;
+            
+            modalCallback = callback;
+            
+            if (callback) {
+                document.getElementById('modalConfirm').onclick = () => {
+                    closeModal();
+                    callback();
+                };
+                document.getElementById('modalConfirm').classList.remove('hidden');
+            } else {
+                document.getElementById('modalConfirm').classList.add('hidden');
+                document.getElementById('modalConfirm').onclick = closeModal;
+            }
+            
+            modal.classList.add('active');
+        };
+
+        const closeModal = () => {
+            document.getElementById('confirmModal').classList.remove('active');
+        };
+
+        // Global Actions
+        const refreshData = () => {
+            loadAll();
+            toast('Data synchronized');
+            logSystem('Manual data refresh executed');
+        };
+
+        const loadAll = () => {
+            updateStats();
+            loadApps();
+            loadNotices();
+            loadFiles();
+        };
+
+        const exportData = () => {
+            const data = {
+                applications: JSON.parse(localStorage.getItem('jm_apps') || '[]'),
+                notices: JSON.parse(localStorage.getItem('jm_notices') || '[]'),
+                files: JSON.parse(localStorage.getItem('jm_files') || '[]'),
+                exported: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `JM_CLUB_BACKUP_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            toast('Database exported');
+            logSystem('Full database export completed');
+        };
+
+        const clearAll = () => {
+            showModal(
+                '⚠️ NUCLEAR_OPTION',
+                'This will PERMANENTLY DELETE all applications, notices, and files. This action is IRREVERSIBLE.',
+                () => {
+                    localStorage.removeItem('jm_apps');
+                    localStorage.removeItem('jm_notices');
+                    localStorage.removeItem('jm_files');
+                    loadAll();
+                    toast('All data purged', 'alert');
+                    logSystem('CRITICAL: All database records purged');
+                },
+                'CONFIRM_PURGE'
+            );
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initMatrix();
+            initHexBg();
+            initLogin();
+            initNotices();
+            initFileUpload();
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshData();
+                }
+            });
+            
+            log('ROOT TERMINAL INITIALIZED');
         });
 
         // Global error handler
-        window.addEventListener('error', (e) => {
-            log('Global error:', e.error);
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // ESC to close modal
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-            
-            // Ctrl/Cmd + R to refresh
-            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
-                e.preventDefault();
-                refreshData();
-            }
-        });
-
-        // Expose functions globally
-        window.logout = logout;
-        window.refreshData = refreshData;
-        window.updateStatus = updateStatus;
-        window.deleteApplication = deleteApplication;
-        window.viewApplication = viewApplication;
-        window.filterApplicants = filterApplicants;
-        window.deleteResource = deleteResource;
-        window.deleteNotice = deleteNotice;
-        window.refreshNotices = refreshNotices;
-        window.clearAllData = clearAllData;
-        window.exportData = exportData;
-        window.closeModal = closeModal;
+        window.onerror = (msg, url, line) => {
+            log(`SYSTEM_ERROR: ${msg} at line ${line}`);
+            return false;
+        };
     </script>
 </body>
 </html>
