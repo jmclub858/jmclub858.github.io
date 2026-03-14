@@ -1,515 +1,606 @@
-<!-- index.html - JM Club User Portal (FIXED & INTERACTIVE) -->
+<!-- index.html - JM Club Cyberpunk Portal -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JM Club | Premium Portal</title>
+    <title>JM Club | Cyber Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-purple: #bc13fe;
+            --dark-bg: #050505;
+            --panel-bg: rgba(10, 10, 15, 0.85);
         }
         
-        /* Custom Scrollbar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        .font-cyber {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* Animated Grid Background */
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+        
+        /* Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+        
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+            color: var(--neon-pink);
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+            color: var(--neon-cyan);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip-path: inset(20% 0 80% 0); transform: translate(-2px, -2px); }
+            20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, 2px); }
+            40% { clip-path: inset(40% 0 50% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 2px); }
+            100% { clip-path: inset(30% 0 20% 0); transform: translate(2px, -2px); }
+        }
+        
+        @keyframes glitch-anim2 {
+            0% { clip-path: inset(10% 0 60% 0); transform: translate(2px, 2px); }
+            20% { clip-path: inset(30% 0 20% 0); transform: translate(-2px, -2px); }
+            40% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 2px); }
+            80% { clip-path: inset(50% 0 30% 0); transform: translate(2px, -2px); }
+            100% { clip-path: inset(0% 0 80% 0); transform: translate(-2px, 2px); }
+        }
+        
+        /* Neon Glow Utilities */
+        .neon-border-cyan {
+            box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), inset 0 0 5px rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+        }
+        
+        .neon-border-pink {
+            box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+            border: 1px solid var(--neon-pink);
+        }
+        
+        .neon-text-cyan {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
+        }
+        
+        .neon-text-pink {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+        }
+        
+        /* Cyber Panel */
+        .cyber-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: scanline 3s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .cyber-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--neon-cyan);
+            border-right: 2px solid var(--neon-cyan);
+        }
+        
+        .cyber-panel-corner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid var(--neon-cyan);
+            border-left: 2px solid var(--neon-cyan);
+        }
+        
+        /* Button Styles */
+        .cyber-btn {
+            position: relative;
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            overflow: hidden;
+            transition: all 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+        
+        .cyber-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+        
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+        
+        .cyber-btn-pink {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+        
+        .cyber-btn-pink:hover {
+            background: var(--neon-pink);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+        
+        /* Input Styles */
+        .cyber-input {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            color: var(--neon-cyan);
+            font-family: 'Rajdhani', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .cyber-input:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+        
+        .cyber-input::placeholder {
+            color: rgba(0, 243, 255, 0.4);
+        }
+        
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
+        
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #000;
         }
+        
         ::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 4px;
+            background: var(--neon-cyan);
+            border-radius: 0;
         }
         
-        /* Glassmorphism */
-        .glass {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(59, 130, 246, 0.1);
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
         }
         
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Neon Glow Effects */
-        .neon-glow {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out forwards;
         }
         
-        .neon-text {
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.4);
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
         
-        /* FIXED: Scroll Reveal Animations - Start visible, animate when scrolled */
-        .reveal {
-            opacity: 1; /* Start visible */
-            transform: translateY(0); /* Start in position */
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
         }
         
-        .reveal.animate {
-            opacity: 0;
-            transform: translateY(30px);
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-cyan); }
+            50% { box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
         }
         
-        .reveal.animate.active {
-            opacity: 1;
-            transform: translateY(0);
+        /* Status Indicators */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
         }
         
-        .reveal-left {
-            opacity: 1;
-            transform: translateX(0);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        .status-online {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
         }
         
-        .reveal-left.animate {
-            opacity: 0;
-            transform: translateX(-50px);
+        .status-offline {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
         }
         
-        .reveal-left.animate.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .reveal-right {
-            opacity: 1;
-            transform: translateX(0);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        
-        .reveal-right.animate {
-            opacity: 0;
-            transform: translateX(50px);
-        }
-        
-        .reveal-right.animate.active {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        .reveal-scale {
-            opacity: 1;
-            transform: scale(1);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        
-        .reveal-scale.animate {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        
-        .reveal-scale.animate.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        /* Stagger delays */
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
-        .delay-400 { transition-delay: 400ms; }
-        .delay-500 { transition-delay: 500ms; }
-        
-        /* Chat Animations */
-        @keyframes messageSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .message-anim {
-            animation: messageSlide 0.4s ease-out forwards;
-        }
-        
-        /* Typing Indicator */
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
-        }
-        
-        .typing-dot {
-            animation: typing 1.4s infinite ease-in-out both;
-        }
-        
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        /* Gradient Background */
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-        }
-        
-        /* Grid Pattern Overlay */
-        .grid-pattern {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-        
-        /* Button Hover Effects */
-        .btn-hover {
-            transition: all 0.3s ease;
-        }
-        .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.5);
-        }
-        
-        /* Input Focus Effects */
-        .input-glow:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-            border-color: #3b82f6;
-        }
-        
-        /* Card Hover Lift */
-        .card-lift {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card-lift:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 60px -15px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* Logo Container */
-        #rive-logo {
-            width: 80px;
-            height: 80px;
-        }
-        
-        /* Rejected Banner */
-        .rejected-banner {
-            background: linear-gradient(90deg, #dc2626 0%, #991b1b 100%);
-            animation: pulse-red 2s infinite;
-        }
-        
-        @keyframes pulse-red {
+        @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.5; }
         }
         
-        /* Loading State */
-        .skeleton {
-            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        /* Loading Animation */
+        .cyber-loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-top-color: var(--neon-cyan);
+            border-right-color: var(--neon-pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
         
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cyber-grid {
+                background-size: 30px 30px;
+            }
         }
     </style>
 </head>
-<body class="gradient-bg text-gray-100 min-h-screen grid-pattern">
+<body class="min-h-screen">
+    <!-- Background Effects -->
+    <div class="cyber-grid"></div>
+    <div class="scanlines"></div>
     
-    <!-- Rejected Banner (Hidden by default) -->
-    <div id="rejectedBanner" class="hidden rejected-banner w-full py-4 text-center font-bold text-white text-lg tracking-wider">
-        ⚠️ MEMBERSHIP DENIED ⚠️
+    <!-- Access Denied Banner -->
+    <div id="accessDenied" class="hidden fixed top-0 left-0 w-full bg-red-900/90 border-b-2 border-red-500 z-50 py-3 px-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
+            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
+            <span class="font-cyber text-red-400 tracking-widest text-sm md:text-base">ACCESS DENIED: MEMBERSHIP REVOKED</span>
+            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
+        </div>
     </div>
 
-    <!-- Sticky Navigation -->
-    <nav class="sticky top-0 z-50 glass border-b border-blue-500/20">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-md border-b border-cyan-500/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-4 reveal-left">
-                    <!-- Animated Logo Canvas -->
-                    <canvas id="rive-logo" width="80" height="80"></canvas>
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <div class="relative w-10 h-10 flex items-center justify-center">
+                        <div class="absolute inset-0 border-2 border-cyan-400 rotate-45 animate-spin" style="animation-duration: 10s;"></div>
+                        <div class="absolute inset-2 border border-pink-500 rotate-12"></div>
+                        <span class="font-cyber text-cyan-400 text-lg font-bold z-10">JM</span>
+                    </div>
                     <div>
-                        <h1 class="font-display text-2xl font-bold text-white neon-text tracking-tight">JM CLUB</h1>
-                        <p class="text-xs text-blue-400 uppercase tracking-widest">Premium Portal</p>
+                        <h1 class="font-cyber text-xl font-bold text-white tracking-wider" data-text="JM CLUB">JM CLUB</h1>
+                        <p class="text-xs text-cyan-400/70 tracking-[0.3em]">CYBER PORTAL v2.0</p>
                     </div>
                 </div>
-                <div class="hidden md:block reveal-right">
-                    <div class="flex items-center space-x-6">
-                        <a href="#notice" class="text-gray-300 hover:text-blue-400 transition-colors text-sm font-medium">Notices</a>
-                        <a href="#homework" class="text-gray-300 hover:text-blue-400 transition-colors text-sm font-medium">Resources</a>
-                        <a href="#ai-chat" class="text-gray-300 hover:text-blue-400 transition-colors text-sm font-medium">AI Assistant</a>
-                        <a href="#apply" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold transition-all btn-hover">Apply Now</a>
-                    </div>
+                
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="#notices" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">Notices</a>
+                    <a href="#resources" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">Resources</a>
+                    <a href="#ai-assistant" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">AI Core</a>
+                    <a href="#apply" class="cyber-btn px-6 py-2 text-sm font-semibold">Join Now</a>
                 </div>
-                <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden p-2 text-gray-300 hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
+                
+                <button id="mobileMenuBtn" class="md:hidden text-cyan-400 text-2xl">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden md:hidden pb-4">
-                <a href="#notice" class="block py-2 text-gray-300 hover:text-blue-400">Notices</a>
-                <a href="#homework" class="block py-2 text-gray-300 hover:text-blue-400">Resources</a>
-                <a href="#ai-chat" class="block py-2 text-gray-300 hover:text-blue-400">AI Assistant</a>
-                <a href="#apply" class="block py-2 text-blue-400 font-semibold">Apply Now</a>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-black/95 border-t border-cyan-500/30">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#notices" class="block text-gray-400 hover:text-cyan-400 py-2">Notices</a>
+                <a href="#resources" class="block text-gray-400 hover:text-cyan-400 py-2">Resources</a>
+                <a href="#ai-assistant" class="block text-gray-400 hover:text-cyan-400 py-2">AI Core</a>
+                <a href="#apply" class="block text-cyan-400 py-2 font-semibold">Join Now</a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
-
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+        
         <!-- Hero Section -->
-        <section class="text-center py-12 reveal-scale">
-            <h2 class="font-display text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 neon-text">JM Club</span>
+        <section class="text-center py-12 md:py-20 fade-in">
+            <div class="inline-block mb-4 px-4 py-1 border border-cyan-500/30 rounded-full bg-cyan-500/10">
+                <span class="text-cyan-400 text-xs tracking-[0.3em] uppercase">System Online</span>
+                <span class="status-dot status-online ml-2"></span>
+            </div>
+            <h2 class="font-cyber text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 glitch" data-text="WELCOME TO THE FUTURE">
+                WELCOME TO THE <span class="neon-text-cyan">FUTURE</span>
             </h2>
-            <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed reveal delay-200">
-                Experience the future of collaborative learning. Premium resources, AI-powered assistance, and exclusive membership benefits await.
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
+                Access premium resources, AI-powered assistance, and exclusive cyber-learning modules.
             </p>
-            <div class="mt-8 flex justify-center gap-4 reveal delay-300">
-                <a href="#apply" class="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white transition-all btn-hover neon-glow">
-                    Get Started
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#apply" class="cyber-btn px-8 py-4 font-cyber font-bold text-lg">
+                    <i class="fas fa-rocket mr-2"></i> Initialize Application
                 </a>
-                <a href="#ai-chat" class="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-semibold text-white transition-all btn-hover">
-                    Try AI Assistant
+                <a href="#ai-assistant" class="cyber-btn cyber-btn-pink px-8 py-4 font-cyber font-bold text-lg">
+                    <i class="fas fa-robot mr-2"></i> Access AI
                 </a>
             </div>
         </section>
 
-        <!-- Notice Board -->
-        <section id="notice" class="reveal animate">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="font-display text-3xl font-bold text-white flex items-center gap-3">
-                    <span class="w-2 h-8 bg-blue-500 rounded-full"></span>
-                    Notice Board
-                </h3>
-                <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-full text-sm border border-blue-500/30">Live Updates</span>
+        <!-- Notices Section -->
+        <section id="notices" class="slide-in-left">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-8 bg-cyan-400 shadow-[0_0_10px_#00f3ff]"></div>
+                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">SYSTEM NOTICES</h3>
+                </div>
+                <span class="text-xs text-cyan-400/70 border border-cyan-400/30 px-3 py-1 rounded">LIVE FEED</span>
             </div>
-            <div id="noticeContainer" class="glass-card rounded-2xl p-8 min-h-[200px] flex items-center justify-center">
-                <div class="text-center text-gray-500">
-                    <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                    </svg>
-                    <p class="text-lg">No active notices at the moment</p>
-                    <p class="text-sm mt-2">Check back later for updates</p>
+            
+            <div id="noticesContainer" class="cyber-panel rounded-lg p-6 min-h-[200px]">
+                <div class="cyber-panel-corner"></div>
+                <div id="noticesList" class="space-y-4">
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-satellite-dish text-4xl mb-3 opacity-50"></i>
+                        <p class="font-cyber tracking-wider">NO ACTIVE TRANSMISSIONS</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Homework Hub -->
-        <section id="homework" class="reveal animate">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="font-display text-3xl font-bold text-white flex items-center gap-3">
-                    <span class="w-2 h-8 bg-cyan-500 rounded-full"></span>
-                    Homework Hub
-                </h3>
-                <button onclick="loadFiles()" class="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center gap-2 transition-colors bg-blue-500/10 px-4 py-2 rounded-lg border border-blue-500/20">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                    Refresh Resources
+        <!-- Resources Section -->
+        <section id="resources" class="fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-8 bg-pink-500 shadow-[0_0_10px_#ff00ff]"></div>
+                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">RESOURCE DATABASE</h3>
+                </div>
+                <button onclick="loadResources()" class="text-cyan-400 hover:text-cyan-300 text-sm flex items-center gap-2 transition-colors">
+                    <i class="fas fa-sync-alt"></i> Sync
                 </button>
             </div>
-            <div id="filesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Files will be loaded here -->
+            
+            <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Resources loaded here -->
             </div>
-            <div id="emptyFiles" class="glass-card rounded-2xl p-12 text-center reveal delay-200">
-                <div class="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                </div>
-                <h4 class="text-xl font-semibold text-white mb-2">No Resources Available</h4>
-                <p class="text-gray-400">Resources will appear here once uploaded by administrators.</p>
+            
+            <div id="emptyResources" class="cyber-panel rounded-lg p-12 text-center mt-6">
+                <div class="cyber-panel-corner"></div>
+                <i class="fas fa-database text-5xl text-gray-600 mb-4"></i>
+                <p class="font-cyber text-gray-500 tracking-wider">DATABASE EMPTY</p>
+                <p class="text-sm text-gray-600 mt-2">Resources will appear here once uploaded by administrators</p>
             </div>
         </section>
 
-        <!-- AI Chat Section -->
-        <section id="ai-chat" class="reveal animate">
-            <div class="flex items-center justify-between mb-8">
-                <h3 class="font-display text-3xl font-bold text-white flex items-center gap-3">
-                    <span class="w-2 h-8 bg-purple-500 rounded-full"></span>
-                    AI Assistant
-                </h3>
-                <div class="flex items-center gap-2 px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm border border-green-500/30">
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    <span id="aiStatus">Online</span>
+        <!-- AI Assistant Section -->
+        <section id="ai-assistant" class="fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-1 h-8 bg-purple-500 shadow-[0_0_10px_#bc13fe]"></div>
+                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">AI CORE: FIATA</h3>
+                </div>
+                <div class="flex items-center gap-2 text-xs">
+                    <span class="status-dot status-online"></span>
+                    <span class="text-green-400">OPERATIONAL</span>
                 </div>
             </div>
             
-            <div id="chatInterface" class="glass-card rounded-2xl overflow-hidden card-lift">
+            <div id="chatInterface" class="cyber-panel rounded-lg overflow-hidden">
+                <div class="cyber-panel-corner"></div>
+                
                 <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-blue-600/20 to-purple-600/20 p-6 border-b border-white/10">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center neon-glow">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-white">Fiata Assistant</h4>
-                            <p class="text-sm text-gray-400">Powered by Gemini 2.5 Flash</p>
-                        </div>
+                <div class="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 p-4 border-b border-cyan-500/20 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center pulse-glow">
+                        <i class="fas fa-brain text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-cyber text-white font-bold">Fiata Assistant</h4>
+                        <p class="text-xs text-cyan-400">Gemini 2.5 Flash Neural Network</p>
                     </div>
                 </div>
-
+                
                 <!-- Chat Messages -->
-                <div id="chatMessages" class="h-96 overflow-y-auto p-6 space-y-4 bg-black/20">
-                    <div class="flex items-start gap-3 message-anim">
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span class="text-xs font-bold text-white">AI</span>
-                        </div>
-                        <div class="glass-card rounded-2xl rounded-tl-none px-4 py-3 max-w-[80%]">
-                            <p class="text-gray-200">Hello! I'm your JM Club AI assistant. How can I help you today?</p>
+                <div id="chatMessages" class="h-96 overflow-y-auto p-4 space-y-4 bg-black/40">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
+                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[80%]">
+                            <p class="text-gray-300 text-sm">Greetings, user. I am Fiata, your JM Club AI assistant. How may I assist your learning journey today?</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Typing Indicator (Hidden) -->
-                <div id="typingIndicator" class="hidden px-6 pb-2">
-                    <div class="flex items-center gap-2 text-gray-500 text-sm">
+                
+                <!-- Typing Indicator -->
+                <div id="typingIndicator" class="hidden px-4 py-2">
+                    <div class="flex items-center gap-2 text-cyan-400 text-sm">
                         <div class="flex gap-1">
-                            <div class="w-2 h-2 bg-blue-400 rounded-full typing-dot"></div>
-                            <div class="w-2 h-2 bg-blue-400 rounded-full typing-dot"></div>
-                            <div class="w-2 h-2 bg-blue-400 rounded-full typing-dot"></div>
+                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
                         </div>
-                        <span>Fiata is thinking...</span>
+                        <span class="text-xs tracking-wider">PROCESSING...</span>
                     </div>
                 </div>
-
+                
                 <!-- Chat Input -->
-                <div class="p-4 bg-white/5 border-t border-white/10">
+                <div class="p-4 bg-black/60 border-t border-cyan-500/20">
                     <form id="chatForm" class="flex gap-3">
                         <input 
                             type="text" 
                             id="chatInput" 
-                            placeholder="Type your message..." 
-                            class="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none input-glow transition-all"
-                            required
+                            placeholder="Enter command..." 
+                            class="cyber-input flex-1 rounded-lg px-4 py-3"
                             autocomplete="off"
                         >
-                        <button 
-                            type="submit" 
-                            id="sendBtn"
-                            class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl font-semibold text-white transition-all btn-hover flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            <span>Send</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
+                        <button type="submit" id="sendBtn" class="cyber-btn px-6 py-3 font-bold">
+                            <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
                 </div>
             </div>
-
-            <!-- Chat Disabled Message -->
-            <div id="chatDisabled" class="hidden glass-card rounded-2xl p-12 text-center border-red-500/30">
-                <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-                <h4 class="text-2xl font-bold text-red-400 mb-2">Access Restricted</h4>
-                <p class="text-gray-400">Your membership status restricts access to AI features.</p>
+            
+            <!-- Access Denied Message -->
+            <div id="chatDisabled" class="hidden cyber-panel rounded-lg p-12 text-center border-red-500/50">
+                <i class="fas fa-lock text-6xl text-red-500 mb-4 animate-pulse"></i>
+                <h4 class="font-cyber text-2xl text-red-400 mb-2">ACCESS RESTRICTED</h4>
+                <p class="text-gray-400">Your membership privileges have been revoked.</p>
             </div>
         </section>
 
-        <!-- Membership Application -->
-        <section id="apply" class="reveal animate pb-12">
-            <div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden">
-                <!-- Background Decoration -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+        <!-- Application Form Section -->
+        <section id="apply" class="fade-in">
+            <div class="cyber-panel rounded-lg p-8 md:p-12 relative overflow-hidden">
+                <div class="cyber-panel-corner"></div>
+                
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none"></div>
                 
                 <div class="relative z-10">
                     <div class="text-center mb-10">
-                        <h3 class="font-display text-4xl font-bold text-white mb-4">Join JM Club</h3>
-                        <p class="text-gray-400 max-w-xl mx-auto">Apply for exclusive membership access to premium resources and AI assistance.</p>
+                        <div class="inline-block mb-4">
+                            <i class="fas fa-fingerprint text-5xl text-cyan-400 pulse-glow"></i>
+                        </div>
+                        <h3 class="font-cyber text-3xl md:text-4xl font-bold text-white mb-2 tracking-wider">MEMBERSHIP APPLICATION</h3>
+                        <p class="text-gray-400">Initialize your access credentials to join the network</p>
                     </div>
 
-                    <form id="applicationForm" class="max-w-2xl mx-auto space-y-6">
+                    <form id="applicationForm" class="max-w-3xl mx-auto space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="reveal-left animate delay-100">
-                                <label class="block text-sm font-medium text-gray-400 mb-2">First Name *</label>
-                                <input 
-                                    type="text" 
-                                    id="firstName" 
-                                    required
-                                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none input-glow transition-all"
-                                    placeholder="John"
-                                >
+                            <div class="space-y-2">
+                                <label class="text-cyan-400 text-xs tracking-wider uppercase">First Name <span class="text-pink-500">*</span></label>
+                                <input type="text" id="firstName" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="JOHN">
                             </div>
-                            <div class="reveal-scale animate delay-200">
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Middle Name</label>
-                                <input 
-                                    type="text" 
-                                    id="middleName"
-                                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none input-glow transition-all"
-                                    placeholder="Optional"
-                                >
+                            <div class="space-y-2">
+                                <label class="text-cyan-400 text-xs tracking-wider uppercase">Middle Name</label>
+                                <input type="text" id="middleName" class="cyber-input w-full rounded-lg px-4 py-3" placeholder="OPTIONAL">
                             </div>
-                            <div class="reveal-right animate delay-300">
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Last Name *</label>
-                                <input 
-                                    type="text" 
-                                    id="lastName" 
-                                    required
-                                    class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none input-glow transition-all"
-                                    placeholder="Doe"
-                                >
+                            <div class="space-y-2">
+                                <label class="text-cyan-400 text-xs tracking-wider uppercase">Last Name <span class="text-pink-500">*</span></label>
+                                <input type="text" id="lastName" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="DOE">
                             </div>
                         </div>
 
-                        <div class="reveal animate delay-400">
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Email Address *</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                required
-                                class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none input-glow transition-all"
-                                placeholder="john.doe@example.com"
-                            >
+                        <div class="space-y-2">
+                            <label class="text-cyan-400 text-xs tracking-wider uppercase">Email Address <span class="text-pink-500">*</span></label>
+                            <input type="email" id="email" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="john.doe@net.com">
                         </div>
 
-                        <div class="reveal animate delay-500">
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Why do you want to join?</label>
-                            <textarea 
-                                id="reason" 
-                                rows="4"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none input-glow transition-all resize-none"
-                                placeholder="Tell us about your interests and goals..."
-                            ></textarea>
+                        <div class="space-y-2">
+                            <label class="text-cyan-400 text-xs tracking-wider uppercase">Why do you want to join? <span class="text-pink-500">*</span></label>
+                            <textarea id="reason" required rows="4" class="cyber-input w-full rounded-lg px-4 py-3 resize-none" placeholder="Describe your objectives..."></textarea>
                         </div>
 
-                        <button 
-                            type="submit" 
-                            id="submitBtn"
-                            class="w-full py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-500 hover:via-purple-500 hover:to-blue-500 rounded-xl font-bold text-lg text-white transition-all btn-hover neon-glow reveal animate delay-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Submit Application
+                        <button type="submit" id="submitBtn" class="cyber-btn w-full py-4 font-cyber font-bold text-lg tracking-wider">
+                            <i class="fas fa-upload mr-2"></i> <span id="submitText">TRANSMIT APPLICATION</span>
                         </button>
                     </form>
 
                     <!-- Success Message -->
                     <div id="successMessage" class="hidden text-center py-12">
-                        <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-                            <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                            </svg>
+                        <div class="w-24 h-24 mx-auto mb-6 relative">
+                            <div class="absolute inset-0 border-4 border-green-500 rounded-full animate-spin" style="animation-duration: 3s;"></div>
+                            <div class="absolute inset-2 border-2 border-cyan-400 rounded-full animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
+                            <i class="fas fa-check text-4xl text-green-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
                         </div>
-                        <h4 class="text-2xl font-bold text-white mb-2">Application Submitted!</h4>
-                        <p class="text-gray-400">We'll review your application and get back to you soon.</p>
-                        <button onclick="resetForm()" class="mt-6 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors">
-                            Submit Another
+                        <h4 class="font-cyber text-2xl text-green-400 mb-2 tracking-wider">TRANSMISSION COMPLETE</h4>
+                        <p class="text-gray-400 mb-6">Your application has been queued for review.</p>
+                        <button onclick="resetForm()" class="cyber-btn cyber-btn-pink px-8 py-3">
+                            <i class="fas fa-redo mr-2"></i> Submit Another
                         </button>
                     </div>
                 </div>
@@ -519,528 +610,280 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>&copy; 2026 JM Club. Created by Jiban and Manish. All rights reserved.</p>
-            <a href="admin.html" class="text-blue-500/50 hover:text-blue-400 mt-2 inline-block transition-colors">Admin Portal</a>
+    <footer class="border-t border-cyan-500/20 bg-black/50 py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="font-cyber text-gray-500 text-sm tracking-wider">&copy; 2026 JM CLUB // CREATED BY JIBAN & MANISH</p>
+            <a href="admin.html" class="inline-block mt-2 text-cyan-500/50 hover:text-cyan-400 text-xs transition-colors tracking-widest">[ ACCESS ADMIN TERMINAL ]</a>
         </div>
     </footer>
 
     <script>
-        // Debug mode
-        const DEBUG = true;
-        function log(...args) {
-            if (DEBUG) console.log('[JM Club]', ...args);
-        }
-
-        // Rive Animation Setup with Generated Logo
-        const initRive = () => {
-            const canvas = document.getElementById('rive-logo');
-            if (!canvas) {
-                log('Logo canvas not found');
-                return;
-            }
-            
-            const ctx = canvas.getContext('2d');
-            let rotation = 0;
-            let pulse = 0;
-            let animationId;
-            
-            function drawLogo() {
-                try {
-                    ctx.clearRect(0, 0, 80, 80);
-                    
-                    ctx.save();
-                    ctx.translate(40, 40);
-                    ctx.rotate(rotation);
-                    
-                    const scale = 1 + Math.sin(pulse) * 0.05;
-                    ctx.scale(scale, scale);
-                    
-                    // Outer ring (neon blue)
-                    ctx.beginPath();
-                    ctx.arc(0, 0, 35, 0, Math.PI * 2);
-                    ctx.strokeStyle = '#3b82f6';
-                    ctx.lineWidth = 3;
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = '#3b82f6';
-                    ctx.stroke();
-                    
-                    // Inner hexagon
-                    ctx.beginPath();
-                    for (let i = 0; i < 6; i++) {
-                        const angle = (Math.PI / 3) * i;
-                        const x = Math.cos(angle) * 20;
-                        const y = Math.sin(angle) * 20;
-                        if (i === 0) ctx.moveTo(x, y);
-                        else ctx.lineTo(x, y);
-                    }
-                    ctx.closePath();
-                    ctx.fillStyle = 'rgba(59, 130, 246, 0.3)';
-                    ctx.fill();
-                    ctx.strokeStyle = '#60a5fa';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                    
-                    // JM Text (counter-rotated to stay upright)
-                    ctx.rotate(-rotation);
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = 'bold 16px Inter, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#3b82f6';
-                    ctx.fillText('JM', 0, 0);
-                    
-                    ctx.restore();
-                    
-                    rotation += 0.01;
-                    pulse += 0.05;
-                    
-                    animationId = requestAnimationFrame(drawLogo);
-                } catch (e) {
-                    log('Logo animation error:', e);
-                }
-            }
-            
-            drawLogo();
-            
-            // Cleanup on page hide
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    cancelAnimationFrame(animationId);
-                } else {
-                    drawLogo();
-                }
-            });
+        // Configuration
+        const CONFIG = {
+            apiKey: 'AIzaSyC8SIbQ-zPeaJ_Pq6VZ1Dw1-ObESpvz7EI',
+            apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+            debug: true
         };
 
-        // Scroll Reveal Animation - FIXED
-        const initScrollReveal = () => {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        log('Revealed:', entry.target.className);
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all animated elements
-            const animatedElements = document.querySelectorAll('.reveal.animate, .reveal-left.animate, .reveal-right.animate, .reveal-scale.animate');
-            animatedElements.forEach(el => {
-                observer.observe(el);
-                log('Observing element for animation');
-            });
-        };
-
-        // Mobile Menu Toggle
-        const initMobileMenu = () => {
-            const btn = document.getElementById('mobileMenuBtn');
-            const menu = document.getElementById('mobileMenu');
-            
-            if (btn && menu) {
-                btn.addEventListener('click', () => {
-                    menu.classList.toggle('hidden');
-                    log('Mobile menu toggled');
-                });
-                
-                // Close menu when clicking links
-                menu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        menu.classList.add('hidden');
-                    });
-                });
-            }
-        };
-
-        // Check Membership Status
-        const checkStatus = () => {
-            try {
-                const status = localStorage.getItem('jm_status');
-                const chatInterface = document.getElementById('chatInterface');
-                const chatDisabled = document.getElementById('chatDisabled');
-                const rejectedBanner = document.getElementById('rejectedBanner');
-
-                log('Membership status:', status);
-
-                if (status === 'rejected') {
-                    chatInterface?.classList.add('hidden');
-                    chatDisabled?.classList.remove('hidden');
-                    rejectedBanner?.classList.remove('hidden');
-                    document.body.classList.add('pt-0');
-                } else {
-                    chatInterface?.classList.remove('hidden');
-                    chatDisabled?.classList.add('hidden');
-                    rejectedBanner?.classList.add('hidden');
-                }
-            } catch (e) {
-                log('Status check error:', e);
-            }
-        };
-
-        // Load Files from LocalStorage
-        const loadFiles = () => {
-            try {
-                const filesGrid = document.getElementById('filesGrid');
-                const emptyFiles = document.getElementById('emptyFiles');
-                
-                if (!filesGrid || !emptyFiles) {
-                    log('File elements not found');
-                    return;
-                }
-
-                const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
-                log('Loading files:', files.length);
-
-                if (files.length === 0) {
-                    filesGrid.innerHTML = '';
-                    emptyFiles.classList.remove('hidden');
-                    return;
-                }
-
-                emptyFiles.classList.add('hidden');
-                filesGrid.innerHTML = files.map((file, index) => `
-                    <div class="glass-card rounded-xl p-6 card-lift reveal-scale animate active" style="transition-delay: ${index * 100}ms">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <span class="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded">PDF</span>
-                        </div>
-                        <h4 class="font-semibold text-white mb-2 truncate" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</h4>
-                        <p class="text-sm text-gray-400 mb-4 line-clamp-2">Resource material for JM Club members</p>
-                        <a href="${escapeHtml(file.url)}" target="_blank" rel="noopener noreferrer" 
-                           class="block w-full py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 rounded-lg text-center text-blue-400 text-sm font-medium transition-all btn-hover">
-                            Download Resource
-                        </a>
-                    </div>
-                `).join('');
-            } catch (e) {
-                log('Load files error:', e);
-            }
-        };
-
-        // AI Chat Functionality - FIXED
-        const initChat = () => {
-            const chatForm = document.getElementById('chatForm');
-            const chatInput = document.getElementById('chatInput');
-            const chatMessages = document.getElementById('chatMessages');
-            const typingIndicator = document.getElementById('typingIndicator');
-            const sendBtn = document.getElementById('sendBtn');
-            const aiStatus = document.getElementById('aiStatus');
-
-            if (!chatForm || !chatInput || !chatMessages) {
-                log('Chat elements not found');
-                return;
-            }
-
-            // Load chat history
-            try {
-                const history = sessionStorage.getItem('jm_chat_history');
-                if (history) {
-                    chatMessages.innerHTML = history;
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    log('Chat history loaded');
-                }
-            } catch (e) {
-                log('History load error:', e);
-            }
-
-            const saveHistory = () => {
-                try {
-                    sessionStorage.setItem('jm_chat_history', chatMessages.innerHTML);
-                } catch (e) {
-                    log('Save history error:', e);
-                }
-            };
-
-            const addMessage = (text, isUser = false) => {
-                const div = document.createElement('div');
-                div.className = `flex items-start gap-3 message-anim ${isUser ? 'flex-row-reverse' : ''}`;
-                
-                if (isUser) {
-                    div.innerHTML = `
-                        <div class="w-8 h-8 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span class="text-xs font-bold text-white">You</span>
-                        </div>
-                        <div class="glass-card rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%] bg-blue-600/20 border-blue-500/30">
-                            <p class="text-gray-200">${escapeHtml(text)}</p>
-                        </div>
-                    `;
-                } else {
-                    div.innerHTML = `
-                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span class="text-xs font-bold text-white">AI</span>
-                        </div>
-                        <div class="glass-card rounded-2xl rounded-tl-none px-4 py-3 max-w-[80%]">
-                            <p class="text-gray-200">${formatAIResponse(text)}</p>
-                        </div>
-                    `;
-                }
-                
-                chatMessages.appendChild(div);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                saveHistory();
-            };
-
-            chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const message = chatInput.value.trim();
-                if (!message) return;
-
-                // Disable input while processing
-                chatInput.disabled = true;
-                sendBtn.disabled = true;
-                sendBtn.innerHTML = `<span>Sending...</span>`;
-
-                // Add user message
-                addMessage(message, true);
-                chatInput.value = '';
-                
-                // Show typing indicator
-                typingIndicator?.classList.remove('hidden');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                try {
-                    log('Sending message to Gemini API...');
-                    
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-
-                    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyC8SIbQ-zPeaJ_Pq6VZ1Dw1-ObESpvz7EI', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{
-                                    text: message
-                                }]
-                            }]
-                        }),
-                        signal: controller.signal
-                    });
-
-                    clearTimeout(timeoutId);
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    log('API Response:', data);
-                    
-                    // Hide typing indicator
-                    typingIndicator?.classList.add('hidden');
-                    
-                    // Extract and display response
-                    let aiResponse = 'I apologize, but I could not process your request at this moment.';
-                    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
-                        aiResponse = data.candidates[0].content.parts[0].text;
-                    } else if (data.error) {
-                        aiResponse = `Error: ${data.error.message || 'Unknown API error'}`;
-                    }
-                    
-                    addMessage(aiResponse);
-
-                } catch (error) {
-                    log('Chat error:', error);
-                    typingIndicator?.classList.add('hidden');
-                    
-                    let errorMsg = 'Connection lost. Please check your internet connection and try again.';
-                    if (error.name === 'AbortError') {
-                        errorMsg = 'Request timed out. Please try again.';
-                    } else if (error.message.includes('Failed to fetch')) {
-                        errorMsg = 'Network error. Please check your connection.';
-                    }
-                    
-                    addMessage(errorMsg);
-                    
-                    // Update status indicator
-                    if (aiStatus) {
-                        aiStatus.textContent = 'Connection Error';
-                        aiStatus.parentElement.classList.remove('bg-green-500/20', 'text-green-400', 'border-green-500/30');
-                        aiStatus.parentElement.classList.add('bg-red-500/20', 'text-red-400', 'border-red-500/30');
-                    }
-                } finally {
-                    // Re-enable input
-                    chatInput.disabled = false;
-                    sendBtn.disabled = false;
-                    sendBtn.innerHTML = `
-                        <span>Send</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    `;
-                    chatInput.focus();
-                }
-            });
-
-            // Allow Enter key to send (Shift+Enter for new line)
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    chatForm.dispatchEvent(new Event('submit'));
-                }
-            });
-        };
-
-        // Format AI Response (convert URLs to links, etc)
-        const formatAIResponse = (text) => {
-            // Escape HTML first
-            let formatted = escapeHtml(text);
-            // Convert URLs to links
-            formatted = formatted.replace(
-                /(https?:\/\/[^\s]+)/g, 
-                '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline break-all">$1</a>'
-            );
-            // Convert newlines to breaks
-            formatted = formatted.replace(/\n/g, '<br>');
-            return formatted;
-        };
-
-        // Application Form Handler - FIXED
-        const initApplicationForm = () => {
-            const form = document.getElementById('applicationForm');
-            const successMessage = document.getElementById('successMessage');
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (!form) {
-                log('Application form not found');
-                return;
-            }
-
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                try {
-                    // Validate required fields
-                    const firstName = document.getElementById('firstName').value.trim();
-                    const lastName = document.getElementById('lastName').value.trim();
-                    const email = document.getElementById('email').value.trim();
-                    
-                    if (!firstName || !lastName || !email) {
-                        alert('Please fill in all required fields');
-                        return;
-                    }
-
-                    // Email validation
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(email)) {
-                        alert('Please enter a valid email address');
-                        return;
-                    }
-
-                    const application = {
-                        id: Date.now(),
-                        firstName: firstName,
-                        middleName: document.getElementById('middleName').value.trim(),
-                        lastName: lastName,
-                        email: email,
-                        reason: document.getElementById('reason').value.trim(),
-                        date: new Date().toISOString(),
-                        status: 'pending'
-                    };
-
-                    // Get existing applications
-                    const existing = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                    existing.push(application);
-                    localStorage.setItem('jm_apps', JSON.stringify(existing));
-                    
-                    log('Application saved:', application);
-
-                    // Show success
-                    form.classList.add('hidden');
-                    successMessage.classList.remove('hidden');
-                    successMessage.classList.add('reveal-scale', 'animate', 'active');
-                    
-                    // Scroll to success message
-                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                } catch (err) {
-                    log('Form submission error:', err);
-                    alert('Error submitting application. Please try again.');
-                }
-            });
-        };
-
-        // Reset form for another submission
-        window.resetForm = () => {
-            const form = document.getElementById('applicationForm');
-            const successMessage = document.getElementById('successMessage');
-            
-            form.reset();
-            form.classList.remove('hidden');
-            successMessage.classList.add('hidden');
-            
-            // Clear inputs
-            document.getElementById('firstName').value = '';
-            document.getElementById('middleName').value = '';
-            document.getElementById('lastName').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('reason').value = '';
-        };
-
-        // Utility: Escape HTML
+        // Utility Functions
+        const log = (...args) => CONFIG.debug && console.log('[JM CLUB]', ...args);
+        
         const escapeHtml = (text) => {
-            if (!text) return '';
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         };
 
-        // Smooth scroll for anchor links
-        const initSmoothScroll = () => {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
+        const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+
+        // Check Access Status
+        const checkAccess = () => {
+            const status = localStorage.getItem('jm_status');
+            if (status === 'rejected') {
+                document.getElementById('accessDenied').classList.remove('hidden');
+                document.getElementById('chatInterface').classList.add('hidden');
+                document.getElementById('chatDisabled').classList.remove('hidden');
+                document.body.style.paddingTop = '50px';
+            }
+        };
+
+        // Mobile Menu
+        const initMobileMenu = () => {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+            
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => menu.classList.add('hidden'));
             });
         };
 
-        // Initialize Everything
+        // Load Notices
+        const loadNotices = () => {
+            const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            const container = document.getElementById('noticesList');
+            
+            if (notices.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fas fa-satellite-dish text-4xl mb-3 opacity-50"></i>
+                        <p class="font-cyber tracking-wider">NO ACTIVE TRANSMISSIONS</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = notices.map(notice => {
+                const date = new Date(notice.date).toLocaleDateString();
+                const colors = {
+                    urgent: 'border-red-500 bg-red-500/10',
+                    high: 'border-yellow-500 bg-yellow-500/10',
+                    normal: 'border-cyan-500 bg-cyan-500/10'
+                };
+                const color = colors[notice.priority] || colors.normal;
+                
+                return `
+                    <div class="border-l-4 ${color} p-4 rounded-r-lg">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-cyber text-white font-bold">${escapeHtml(notice.title)}</h4>
+                            <span class="text-xs text-gray-500">${date}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm">${escapeHtml(notice.content)}</p>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // Load Resources
+        const loadResources = () => {
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            const grid = document.getElementById('resourcesGrid');
+            const empty = document.getElementById('emptyResources');
+            
+            if (files.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            
+            empty.classList.add('hidden');
+            grid.innerHTML = files.map(file => `
+                <div class="cyber-panel rounded-lg p-6 group hover:scale-[1.02] transition-transform duration-300">
+                    <div class="cyber-panel-corner"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30">
+                            <i class="fas fa-file-alt text-cyan-400 text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 border border-gray-700 px-2 py-1 rounded">PDF</span>
+                    </div>
+                    <h4 class="font-cyber text-white font-bold mb-2 truncate" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</h4>
+                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">${escapeHtml(file.description || 'Classified resource material')}</p>
+                    <a href="${escapeHtml(file.url)}" target="_blank" rel="noopener" 
+                       class="cyber-btn block text-center py-2 text-sm">
+                        <i class="fas fa-download mr-2"></i> Access File
+                    </a>
+                </div>
+            `).join('');
+        };
+
+        // AI Chat System
+        const initChat = () => {
+            const form = document.getElementById('chatForm');
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const typing = document.getElementById('typingIndicator');
+            const btn = document.getElementById('sendBtn');
+            
+            const addMessage = (text, isUser = false) => {
+                const div = document.createElement('div');
+                div.className = `flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''} animate-[fadeIn_0.3s_ease-out]`;
+                
+                if (isUser) {
+                    div.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0 text-xs font-bold text-black">YOU</div>
+                        <div class="cyber-panel rounded-lg rounded-tr-none p-3 max-w-[80%] border-pink-500/30">
+                            <p class="text-pink-300 text-sm">${escapeHtml(text)}</p>
+                        </div>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
+                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[80%]">
+                            <p class="text-gray-300 text-sm">${text}</p>
+                        </div>
+                    `;
+                }
+                
+                messages.appendChild(div);
+                messages.scrollTop = messages.scrollHeight;
+                
+                // Save to session
+                sessionStorage.setItem('jm_chat', messages.innerHTML);
+            };
+            
+            // Load history
+            const history = sessionStorage.getItem('jm_chat');
+            if (history) messages.innerHTML = history;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = input.value.trim();
+                if (!text) return;
+                
+                addMessage(text, true);
+                input.value = '';
+                btn.disabled = true;
+                typing.classList.remove('hidden');
+                messages.scrollTop = messages.scrollHeight;
+                
+                try {
+                    const response = await fetch(`${CONFIG.apiUrl}?key=${CONFIG.apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text }] }]
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    const data = await response.json();
+                    let reply = 'Neural network error. Please retry.';
+                    
+                    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        reply = data.candidates[0].content.parts[0].text;
+                    }
+                    
+                    typing.classList.add('hidden');
+                    addMessage(reply);
+                    
+                } catch (err) {
+                    log('Chat error:', err);
+                    typing.classList.add('hidden');
+                    addMessage('Connection lost. Check network and retry.');
+                } finally {
+                    btn.disabled = false;
+                    input.focus();
+                }
+            });
+        };
+
+        // Application Form
+        const initApplicationForm = () => {
+            const form = document.getElementById('applicationForm');
+            const success = document.getElementById('successMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const application = {
+                    id: generateId(),
+                    firstName: document.getElementById('firstName').value.trim(),
+                    middleName: document.getElementById('middleName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    reason: document.getElementById('reason').value.trim(),
+                    date: new Date().toISOString(),
+                    status: 'pending'
+                };
+                
+                // Validation
+                if (!application.firstName || !application.lastName || !application.email || !application.reason) {
+                    alert('Please fill all required fields');
+                    return;
+                }
+                
+                // Email validation
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(application.email)) {
+                    alert('Please enter a valid email');
+                    return;
+                }
+                
+                // Save
+                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+                apps.push(application);
+                localStorage.setItem('jm_apps', JSON.stringify(apps));
+                
+                log('Application submitted:', application);
+                
+                // Show success
+                form.classList.add('hidden');
+                success.classList.remove('hidden');
+                success.classList.add('fade-in');
+            });
+        };
+
+        // Reset Form
+        window.resetForm = () => {
+            document.getElementById('applicationForm').reset();
+            document.getElementById('applicationForm').classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+        };
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             log('Initializing JM Club Portal...');
+            checkAccess();
+            initMobileMenu();
+            loadNotices();
+            loadResources();
+            initChat();
+            initApplicationForm();
             
-            try {
-                initRive();
-                initScrollReveal();
-                initMobileMenu();
-                initSmoothScroll();
-                checkStatus();
-                loadFiles();
-                initChat();
-                initApplicationForm();
-                
-                log('Initialization complete');
-            } catch (e) {
-                log('Initialization error:', e);
-            }
+            // Refresh notices every 30 seconds
+            setInterval(loadNotices, 30000);
         });
 
-        // Handle errors globally
-        window.addEventListener('error', (e) => {
-            log('Global error:', e.error);
-        });
-
-        // Expose functions globally for onclick handlers
-        window.loadFiles = loadFiles;
+        // Global error handler
+        window.onerror = (msg, url, line) => {
+            log(`Error: ${msg} at ${line}`);
+            return false;
+        };
     </script>
 </body>
 </html>
