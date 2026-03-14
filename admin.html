@@ -1,0 +1,351 @@
+<!-- 
+  JM Club - Admin Panel (admin.html)
+  Save this file as admin.html
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JM Club | Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        jm: {
+                            black: '#050505',
+                            dark: '#0a0a0f',
+                            card: '#13131f',
+                            accent: '#00f3ff',
+                            purple: '#bc13fe',
+                            danger: '#ff0040',
+                            success: '#00ff88'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+        }
+        .glass-panel {
+            background: rgba(19, 19, 31, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .login-overlay {
+            background: radial-gradient(circle at center, #0a0a0f 0%, #000000 100%);
+        }
+        input[type="file"]::file-selector-button {
+            background: #00f3ff;
+            color: black;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="fixed inset-0 z-50 login-overlay flex items-center justify-center">
+        <div class="glass-panel p-8 rounded-2xl w-full max-w-md border border-jm-accent/30 shadow-[0_0_50px_rgba(0,243,255,0.2)]">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 mx-auto rounded-xl bg-gradient-to-br from-jm-accent to-jm-purple flex items-center justify-center font-display font-bold text-black text-2xl mb-4">JM</div>
+                <h2 class="font-display text-2xl font-bold text-white">COMMAND CENTER</h2>
+                <p class="text-gray-500 text-sm mt-2">Restricted Access</p>
+            </div>
+            
+            <form onsubmit="authenticate(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-jm-accent mb-2 tracking-wider">USERNAME</label>
+                    <input type="text" id="username" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-jm-accent focus:outline-none" placeholder="Enter username">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-jm-accent mb-2 tracking-wider">PASSWORD</label>
+                    <input type="password" id="password" class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-jm-accent focus:outline-none" placeholder="Enter password">
+                </div>
+                <button type="submit" class="w-full py-3 bg-jm-accent text-black font-bold rounded-lg hover:bg-cyan-400 transition-colors mt-6">
+                    AUTHENTICATE
+                </button>
+                <p id="login-error" class="text-jm-danger text-sm text-center hidden">Invalid Credentials</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden initially) -->
+    <div id="dashboard" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="glass-panel border-b border-white/10 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded bg-jm-danger flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-wider">ADMIN CONSOLE</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-400">Admin: 2127</span>
+                    <button onclick="logout()" class="px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 text-sm transition-colors">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            
+            <!-- Applications Management -->
+            <section class="glass-panel rounded-2xl p-6 border border-white/5">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-display text-xl font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-6 bg-jm-purple rounded-full"></span>
+                        ADMISSION REQUESTS
+                    </h3>
+                    <span id="pending-count" class="px-3 py-1 rounded-full bg-jm-purple/20 text-jm-purple text-xs font-bold">0 Pending</span>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-white/10 text-gray-500 text-xs uppercase tracking-wider">
+                                <th class="pb-3 font-medium">Applicant</th>
+                                <th class="pb-3 font-medium">Statement Preview</th>
+                                <th class="pb-3 font-medium">Date</th>
+                                <th class="pb-3 font-medium">Status</th>
+                                <th class="pb-3 font-medium text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applications-table" class="text-sm">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="no-applications" class="text-center py-12 text-gray-600 hidden">
+                    <p>No applications found.</p>
+                </div>
+            </section>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- File Uploader -->
+                <section class="glass-panel rounded-2xl p-6 border border-white/5">
+                    <h3 class="font-display text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <span class="w-2 h-6 bg-jm-accent rounded-full"></span>
+                        THE UPLINK
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-2 border-dashed border-white/10 rounded-xl p-6 text-center hover:border-jm-accent/50 transition-colors">
+                            <input type="file" id="file-input" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-jm-accent file:text-black hover:file:bg-cyan-400" onchange="handleFileUpload(this)">
+                            <p class="text-xs text-gray-600 mt-2">Files will be converted to Base64 for instant access</p>
+                        </div>
+                        
+                        <div id="file-list" class="space-y-2 max-h-[200px] overflow-y-auto">
+                            <!-- File list -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Notice Publisher -->
+                <section class="glass-panel rounded-2xl p-6 border border-white/5">
+                    <h3 class="font-display text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <span class="w-2 h-6 bg-yellow-500 rounded-full"></span>
+                        BROADCAST
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <textarea id="notice-input" rows="3" class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:border-yellow-500 focus:outline-none resize-none" placeholder="Enter global notice..."></textarea>
+                        <button onclick="postNotice()" class="w-full py-2 bg-yellow-500/20 border border-yellow-500/50 text-yellow-500 rounded-lg hover:bg-yellow-500/30 transition-colors font-bold">
+                            POST NOTICE
+                        </button>
+                        
+                        <div id="notice-list" class="space-y-2 max-h-[150px] overflow-y-auto mt-4">
+                            <!-- Notices -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const ADMIN_USER = '2127';
+        const ADMIN_PASS = 'jm.club';
+
+        function authenticate(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if(user === ADMIN_USER && pass === ADMIN_PASS) {
+                gsap.to('#login-overlay', {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        document.getElementById('login-overlay').classList.add('hidden');
+                        document.getElementById('dashboard').classList.remove('hidden');
+                        gsap.from('#dashboard', { opacity: 0, y: 20, duration: 0.5 });
+                        loadData();
+                    }
+                });
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+                gsap.from('#login-overlay form', { x: [-10, 10, -10, 10, 0], duration: 0.4 });
+            }
+        }
+
+        function logout() {
+            location.reload();
+        }
+
+        function loadData() {
+            loadApplications();
+            loadFiles();
+            loadNotices();
+        }
+
+        function loadApplications() {
+            const apps = JSON.parse(localStorage.getItem('jm_applications') || '[]');
+            const tbody = document.getElementById('applications-table');
+            const pending = apps.filter(a => a.status === 'pending').length;
+            
+            document.getElementById('pending-count').textContent = `${pending} Pending`;
+            
+            if(apps.length === 0) {
+                document.getElementById('no-applications').classList.remove('hidden');
+                tbody.innerHTML = '';
+                return;
+            }
+            
+            document.getElementById('no-applications').classList.add('hidden');
+            tbody.innerHTML = apps.map(app => `
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <td class="py-4">
+                        <div class="font-bold text-white">${app.firstName} ${app.middleName} ${app.lastName}</div>
+                    </td>
+                    <td class="py-4 max-w-xs truncate text-gray-400">${app.statement}</td>
+                    <td class="py-4 text-gray-500">${app.date}</td>
+                    <td class="py-4">
+                        <span class="px-2 py-1 rounded text-xs font-bold ${app.status === 'approved' ? 'bg-green-500/20 text-green-400' : app.status === 'rejected' ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'} uppercase">
+                            ${app.status}
+                        </span>
+                    </td>
+                    <td class="py-4 text-right space-x-2">
+                        ${app.status === 'pending' ? `
+                            <button onclick="updateStatus(${app.id}, 'approved')" class="px-3 py-1 rounded bg-green-500/20 text-green-400 hover:bg-green-500/30 text-xs font-bold transition-colors">APPROVE</button>
+                            <button onclick="updateStatus(${app.id}, 'rejected')" class="px-3 py-1 rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 text-xs font-bold transition-colors">REJECT</button>
+                        ` : '<span class="text-gray-600 text-xs">Processed</span>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStatus(id, status) {
+            let apps = JSON.parse(localStorage.getItem('jm_applications') || '[]');
+            apps = apps.map(app => app.id === id ? {...app, status} : app);
+            localStorage.setItem('jm_applications', JSON.stringify(apps));
+            loadApplications();
+            
+            // Trigger update event for other tabs
+            window.dispatchEvent(new StorageEvent('storage', { key: 'jm_applications' }));
+        }
+
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if(!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+                files.push({
+                    name: file.name,
+                    data: e.target.result,
+                    date: new Date().toLocaleDateString()
+                });
+                localStorage.setItem('jm_files', JSON.stringify(files));
+                loadFiles();
+                input.value = '';
+                window.dispatchEvent(new StorageEvent('storage', { key: 'jm_files' }));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadFiles() {
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            const container = document.getElementById('file-list');
+            
+            container.innerHTML = files.map((f, i) => `
+                <div class="flex items-center justify-between p-3 rounded-lg bg-black/30 border border-white/5">
+                    <div class="flex items-center gap-2 truncate">
+                        <svg class="w-4 h-4 text-jm-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span class="text-sm truncate max-w-[200px]">${f.name}</span>
+                    </div>
+                    <button onclick="deleteFile(${i})" class="text-red-500 hover:text-red-400 text-xs font-bold">DELETE</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteFile(index) {
+            let files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            files.splice(index, 1);
+            localStorage.setItem('jm_files', JSON.stringify(files));
+            loadFiles();
+            window.dispatchEvent(new StorageEvent('storage', { key: 'jm_files' }));
+        }
+
+        function postNotice() {
+            const input = document.getElementById('notice-input');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            notices.unshift({
+                text,
+                date: new Date().toLocaleDateString()
+            });
+            localStorage.setItem('jm_notices', JSON.stringify(notices));
+            input.value = '';
+            loadNotices();
+            window.dispatchEvent(new StorageEvent('storage', { key: 'jm_notices' }));
+        }
+
+        function loadNotices() {
+            const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            const container = document.getElementById('notice-list');
+            
+            container.innerHTML = notices.map((n, i) => `
+                <div class="flex items-center justify-between p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                    <span class="text-sm text-yellow-200/80 truncate max-w-[250px]">${n.text}</span>
+                    <button onclick="deleteNotice(${i})" class="text-red-500 hover:text-red-400 text-xs">×</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteNotice(index) {
+            let notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            notices.splice(index, 1);
+            localStorage.setItem('jm_notices', JSON.stringify(notices));
+            loadNotices();
+            window.dispatchEvent(new StorageEvent('storage', { key: 'jm_notices' }));
+        }
+
+        // Check auth on load (simple version)
+        window.onload = () => {
+            document.getElementById('username').focus();
+        };
+    </script>
+</body>
+</html>
