@@ -1,20 +1,23 @@
-<!-- index.html - JM Club Cyberpunk Portal -->
+<!-- index.html - JM Club CYBERPUNK PORTAL v3.0 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JM Club | Cyber Portal</title>
+    <title>JM CLUB // NEURAL INTERFACE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@rive-app/canvas@2.15.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
+            --neon-green: #00ff41;
             --neon-cyan: #00f3ff;
             --neon-pink: #ff00ff;
-            --neon-purple: #bc13fe;
-            --dark-bg: #050505;
-            --panel-bg: rgba(10, 10, 15, 0.85);
+            --neon-amber: #ffbf00;
+            --neon-red: #ff0040;
+            --dark-bg: #050508;
+            --panel-bg: rgba(5, 5, 8, 0.95);
         }
         
         * {
@@ -26,61 +29,66 @@
         body {
             font-family: 'Rajdhani', sans-serif;
             background: var(--dark-bg);
-            color: #e0e0e0;
+            color: var(--neon-green);
             overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        .font-mono {
+            font-family: 'Share Tech Mono', monospace;
         }
         
         .font-cyber {
             font-family: 'Orbitron', sans-serif;
         }
         
-        /* Animated Grid Background */
-        .cyber-grid {
+        /* CRT Effect */
+        .crt::before {
+            content: " ";
+            display: block;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            perspective: 500px;
-            transform-style: preserve-3d;
-            animation: gridMove 20s linear infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        @keyframes gridMove {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(50px); }
-        }
-        
-        /* Scanline Effect */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.1) 50%,
-                rgba(0,0,0,0.1)
-            );
-            background-size: 100% 4px;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.3;
+        }
+        
+        /* Scanline */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 255, 65, 0.3);
+            opacity: 0.4;
+            animation: scan 6s linear infinite;
+            pointer-events: none;
+            z-index: 9998;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        @keyframes scan {
+            0% { top: -5px; }
+            100% { top: 100vh; }
+        }
+        
+        /* Rive Canvas Container */
+        #rive-container {
+            width: 120px;
+            height: 120px;
+            position: relative;
         }
         
         /* Glitch Effect */
         .glitch {
             position: relative;
-            animation: glitch-skew 1s infinite;
+            animation: glitch-skew 3s infinite;
         }
         
         .glitch::before,
@@ -123,34 +131,13 @@
             100% { clip-path: inset(0% 0 80% 0); transform: translate(-2px, 2px); }
         }
         
-        /* Neon Glow Utilities */
-        .neon-border-cyan {
-            box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan), inset 0 0 5px rgba(0, 243, 255, 0.1);
-            border: 1px solid var(--neon-cyan);
-        }
-        
-        .neon-border-pink {
-            box-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
-            border: 1px solid var(--neon-pink);
-        }
-        
-        .neon-text-cyan {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
-        }
-        
-        .neon-text-pink {
-            color: var(--neon-pink);
-            text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
-        }
-        
         /* Cyber Panel */
         .cyber-panel {
             background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 255, 65, 0.3);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         
         .cyber-panel::before {
@@ -160,11 +147,11 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            animation: scanline 3s linear infinite;
+            background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+            animation: panel-scan 3s linear infinite;
         }
         
-        @keyframes scanline {
+        @keyframes panel-scan {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
@@ -176,357 +163,533 @@
             right: 0;
             width: 20px;
             height: 20px;
-            border-bottom: 2px solid var(--neon-cyan);
-            border-right: 2px solid var(--neon-cyan);
+            border-bottom: 2px solid var(--neon-green);
+            border-right: 2px solid var(--neon-green);
         }
         
-        .cyber-panel-corner {
+        .panel-corner {
             position: absolute;
             top: 0;
             left: 0;
             width: 20px;
             height: 20px;
-            border-top: 2px solid var(--neon-cyan);
-            border-left: 2px solid var(--neon-cyan);
+            border-top: 2px solid var(--neon-green);
+            border-left: 2px solid var(--neon-green);
         }
         
-        /* Button Styles */
-        .cyber-btn {
-            position: relative;
+        /* Neon Utilities */
+        .neon-green { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+        .neon-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+        .neon-pink { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
+        .neon-amber { color: var(--neon-amber); text-shadow: 0 0 10px var(--neon-amber); }
+        .neon-red { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+        
+        /* Buttons */
+        .hack-btn {
             background: transparent;
-            border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 12px 24px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 2px;
+            position: relative;
             overflow: hidden;
-            transition: all 0.3s;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
         }
         
-        .cyber-btn:hover {
-            background: var(--neon-cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-        
-        .cyber-btn::before {
+        .hack-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.5s;
+            background: var(--neon-green);
+            transition: left 0.3s;
+            z-index: -1;
         }
         
-        .cyber-btn:hover::before {
-            left: 100%;
+        .hack-btn:hover {
+            color: #000;
+            box-shadow: 0 0 30px var(--neon-green);
         }
         
-        .cyber-btn-pink {
+        .hack-btn:hover::before {
+            left: 0;
+        }
+        
+        .hack-btn-cyan {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+        
+        .hack-btn-cyan::before {
+            background: var(--neon-cyan);
+        }
+        
+        .hack-btn-pink {
             border-color: var(--neon-pink);
             color: var(--neon-pink);
         }
         
-        .cyber-btn-pink:hover {
+        .hack-btn-pink::before {
             background: var(--neon-pink);
-            color: #000;
-            box-shadow: 0 0 20px var(--neon-pink);
         }
         
-        /* Input Styles */
-        .cyber-input {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: var(--neon-cyan);
-            font-family: 'Rajdhani', sans-serif;
+        /* Inputs */
+        .hack-input {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            color: var(--neon-green);
+            padding: 12px 16px;
+            font-family: 'Share Tech Mono', monospace;
+            width: 100%;
             transition: all 0.3s;
         }
         
-        .cyber-input:focus {
+        .hack-input:focus {
             outline: none;
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
         }
         
-        .cyber-input::placeholder {
-            color: rgba(0, 243, 255, 0.4);
+        /* Live Indicator */
+        .live-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: live-pulse 2s infinite;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        /* Notification Toast */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .hack-toast {
+            background: rgba(0, 10, 0, 0.98);
+            border: 1px solid var(--neon-green);
+            padding: 16px 20px;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hack-toast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--neon-green);
+        }
+        
+        .hack-toast.show {
+            transform: translateX(0);
+        }
+        
+        .hack-toast.alert {
+            border-color: var(--neon-amber);
+        }
+        
+        .hack-toast.alert::before {
+            background: var(--neon-amber);
+        }
+        
+        .hack-toast.critical {
+            border-color: var(--neon-red);
+            animation: critical-pulse 1s infinite;
+        }
+        
+        .hack-toast.critical::before {
+            background: var(--neon-red);
+        }
+        
+        @keyframes critical-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 64, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 0, 64, 0.8); }
+        }
+        
+        /* Typing Effect */
+        .typing::after {
+            content: '▋';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
         
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         
         ::-webkit-scrollbar-track {
-            background: #000;
+            background: #001100;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: var(--neon-cyan);
-            border-radius: 0;
+            background: var(--neon-green);
         }
         
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
+        /* Matrix Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: -1;
         }
         
-        @keyframes fadeIn {
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border: 1px solid;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+        
+        .status-online {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            background: rgba(0, 255, 65, 0.1);
+        }
+        
+        .status-offline {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            background: rgba(255, 0, 64, 0.1);
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            height: 4px;
+            background: rgba(0, 255, 65, 0.1);
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: width 0.3s ease;
+        }
+        
+        /* Access Denied Banner */
+        .access-denied {
+            background: linear-gradient(90deg, rgba(255,0,64,0.2), rgba(255,0,64,0.1));
+            border-bottom: 2px solid var(--neon-red);
+            animation: denied-pulse 2s infinite;
+        }
+        
+        @keyframes denied-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* File Card */
+        .file-card {
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .file-card:hover::before {
+            left: 100%;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.2);
+        }
+        
+        /* Chat Message */
+        .chat-msg {
+            animation: msgSlide 0.3s ease-out;
+        }
+        
+        @keyframes msgSlide {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .slide-in-left {
-            animation: slideInLeft 0.6s ease-out forwards;
-        }
-        
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 5px var(--neon-cyan); }
-            50% { box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
-        }
-        
-        /* Status Indicators */
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulse 2s infinite;
-        }
-        
-        .status-online {
-            background: #00ff00;
-            box-shadow: 0 0 10px #00ff00;
-        }
-        
-        .status-offline {
-            background: #ff0000;
-            box-shadow: 0 0 10px #ff0000;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        /* Loading Animation */
-        .cyber-loader {
-            width: 50px;
-            height: 50px;
-            border: 3px solid transparent;
-            border-top-color: var(--neon-cyan);
-            border-right-color: var(--neon-pink);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         /* Responsive */
         @media (max-width: 768px) {
-            .cyber-grid {
-                background-size: 30px 30px;
+            #rive-container {
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
+<base target="_blank">
 </head>
-<body class="min-h-screen">
-    <!-- Background Effects -->
-    <div class="cyber-grid"></div>
-    <div class="scanlines"></div>
+<body class="crt">
+    <div class="scanline"></div>
+    <canvas id="matrixCanvas" class="matrix-bg"></canvas>
     
-    <!-- Access Denied Banner -->
-    <div id="accessDenied" class="hidden fixed top-0 left-0 w-full bg-red-900/90 border-b-2 border-red-500 z-50 py-3 px-4">
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Access Denied Banner (Hidden by default) -->
+    <div id="accessDenied" class="hidden access-denied fixed top-0 left-0 w-full z-50 py-3 px-4">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
-            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
-            <span class="font-cyber text-red-400 tracking-widest text-sm md:text-base">ACCESS DENIED: MEMBERSHIP REVOKED</span>
-            <i class="fas fa-exclamation-triangle text-red-500 animate-pulse"></i>
+            <i class="fas fa-ban neon-red text-xl animate-pulse"></i>
+            <span class="font-cyber neon-red tracking-widest text-sm md:text-base">/// ACCESS REVOKED /// NEURAL LINK TERMINATED ///</span>
+            <i class="fas fa-ban neon-red text-xl animate-pulse"></i>
         </div>
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-40 bg-black/80 backdrop-blur-md border-b border-cyan-500/30">
+    <nav class="fixed top-0 w-full z-40 bg-black/90 border-b border-green-500/30 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
-                    <div class="relative w-10 h-10 flex items-center justify-center">
-                        <div class="absolute inset-0 border-2 border-cyan-400 rotate-45 animate-spin" style="animation-duration: 10s;"></div>
-                        <div class="absolute inset-2 border border-pink-500 rotate-12"></div>
-                        <span class="font-cyber text-cyan-400 text-lg font-bold z-10">JM</span>
+                    <!-- Rive Logo -->
+                    <div id="rive-container">
+                        <canvas id="rive-canvas" width="120" height="120"></canvas>
                     </div>
                     <div>
-                        <h1 class="font-cyber text-xl font-bold text-white tracking-wider" data-text="JM CLUB">JM CLUB</h1>
-                        <p class="text-xs text-cyan-400/70 tracking-[0.3em]">CYBER PORTAL v2.0</p>
+                        <h1 class="font-cyber text-xl md:text-2xl font-bold neon-green tracking-wider glitch" data-text="JM CLUB">JM CLUB</h1>
+                        <p class="text-[10px] md:text-xs text-green-400/70 tracking-[0.3em]">NEURAL_INTERFACE v3.0</p>
                     </div>
                 </div>
                 
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="#notices" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">Notices</a>
-                    <a href="#resources" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">Resources</a>
-                    <a href="#ai-assistant" class="text-gray-400 hover:text-cyan-400 transition-colors text-sm tracking-wider uppercase">AI Core</a>
-                    <a href="#apply" class="cyber-btn px-6 py-2 text-sm font-semibold">Join Now</a>
+                    <div class="flex items-center gap-2 px-3 py-1 border border-green-500/30 rounded bg-green-500/10">
+                        <div class="live-pulse"></div>
+                        <span class="text-xs text-green-400 font-mono">SYSTEM_ONLINE</span>
+                    </div>
+                    <a href="#notices" class="text-gray-400 hover:text-green-400 transition-colors text-sm tracking-wider uppercase font-mono">Notices</a>
+                    <a href="#resources" class="text-gray-400 hover:text-green-400 transition-colors text-sm tracking-wider uppercase font-mono">Data_Packets</a>
+                    <a href="#neural-link" class="text-gray-400 hover:text-green-400 transition-colors text-sm tracking-wider uppercase font-mono">Neural_Link</a>
+                    <a href="#join" class="hack-btn py-2 px-4 text-xs">Initialize</a>
                 </div>
                 
-                <button id="mobileMenuBtn" class="md:hidden text-cyan-400 text-2xl">
+                <button id="mobileMenuBtn" class="md:hidden text-green-400 text-xl">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-black/95 border-t border-cyan-500/30">
+        <div id="mobileMenu" class="hidden md:hidden bg-black/95 border-t border-green-500/30">
             <div class="px-4 py-4 space-y-3">
-                <a href="#notices" class="block text-gray-400 hover:text-cyan-400 py-2">Notices</a>
-                <a href="#resources" class="block text-gray-400 hover:text-cyan-400 py-2">Resources</a>
-                <a href="#ai-assistant" class="block text-gray-400 hover:text-cyan-400 py-2">AI Core</a>
-                <a href="#apply" class="block text-cyan-400 py-2 font-semibold">Join Now</a>
+                <a href="#notices" class="block text-gray-400 hover:text-green-400 py-2 font-mono text-sm">[NOTICES]</a>
+                <a href="#resources" class="block text-gray-400 hover:text-green-400 py-2 font-mono text-sm">[DATA_PACKETS]</a>
+                <a href="#neural-link" class="block text-gray-400 hover:text-green-400 py-2 font-mono text-sm">[NEURAL_LINK]</a>
+                <a href="#join" class="block text-green-400 py-2 font-mono text-sm font-bold">[INITIALIZE_SEQUENCE]</a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto space-y-16">
         
         <!-- Hero Section -->
-        <section class="text-center py-12 md:py-20 fade-in">
-            <div class="inline-block mb-4 px-4 py-1 border border-cyan-500/30 rounded-full bg-cyan-500/10">
-                <span class="text-cyan-400 text-xs tracking-[0.3em] uppercase">System Online</span>
-                <span class="status-dot status-online ml-2"></span>
+        <section class="text-center py-12 md:py-20 relative">
+            <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+                <div class="text-[20vw] font-cyber font-black neon-green">JM</div>
             </div>
-            <h2 class="font-cyber text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 glitch" data-text="WELCOME TO THE FUTURE">
-                WELCOME TO THE <span class="neon-text-cyan">FUTURE</span>
-            </h2>
-            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed">
-                Access premium resources, AI-powered assistance, and exclusive cyber-learning modules.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#apply" class="cyber-btn px-8 py-4 font-cyber font-bold text-lg">
-                    <i class="fas fa-rocket mr-2"></i> Initialize Application
-                </a>
-                <a href="#ai-assistant" class="cyber-btn cyber-btn-pink px-8 py-4 font-cyber font-bold text-lg">
-                    <i class="fas fa-robot mr-2"></i> Access AI
-                </a>
+            
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-2 mb-6 px-4 py-2 border border-green-500/30 rounded-full bg-green-500/10">
+                    <div class="live-pulse"></div>
+                    <span class="text-green-400 text-xs tracking-[0.3em] font-mono">NEURAL_NETWORK_ACTIVE</span>
+                </div>
+                
+                <h2 class="font-cyber text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                    WELCOME TO THE <span class="neon-cyan glitch" data-text="GRID">GRID</span>
+                </h2>
+                
+                <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-8 leading-relaxed font-mono">
+                    Access classified resources, establish neural link with AI core, and join the elite network.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#join" class="hack-btn text-lg font-bold">
+                        <i class="fas fa-rocket mr-2"></i> INITIALIZE_LINK
+                    </a>
+                    <a href="#neural-link" class="hack-btn hack-btn-cyan text-lg font-bold">
+                        <i class="fas fa-brain mr-2"></i> ACCESS_AI
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-Time Status Monitor -->
+        <section class="cyber-panel rounded-lg p-4 md:p-6">
+            <div class="panel-corner"></div>
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-satellite-dish neon-cyan text-xl animate-pulse"></i>
+                    <span class="font-cyber text-lg neon-cyan">REAL_TIME_MONITOR</span>
+                </div>
+                <div class="flex items-center gap-4 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        <span class="text-gray-400">LATENCY: <span class="text-green-400">3ms</span></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                        <span class="text-gray-400">SYNC: <span class="text-cyan-400">ACTIVE</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-container rounded-full">
+                <div class="progress-bar" id="syncBar" style="width: 100%"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-xs font-mono text-gray-500">
+                <span>LAST_SYNC: <span id="lastSync">--:--:--</span></span>
+                <span>NEXT_UPDATE: <span id="nextUpdate">3s</span></span>
             </div>
         </section>
 
         <!-- Notices Section -->
-        <section id="notices" class="slide-in-left">
+        <section id="notices" class="scroll-mt-24">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-1 h-8 bg-cyan-400 shadow-[0_0_10px_#00f3ff]"></div>
-                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">SYSTEM NOTICES</h3>
+                    <h3 class="font-cyber text-2xl font-bold neon-cyan tracking-wider">INCOMING_TRANSMISSIONS</h3>
                 </div>
-                <span class="text-xs text-cyan-400/70 border border-cyan-400/30 px-3 py-1 rounded">LIVE FEED</span>
+                <span class="text-xs font-mono text-cyan-400/70 border border-cyan-400/30 px-3 py-1 rounded" id="noticeCount">0 PENDING</span>
             </div>
             
-            <div id="noticesContainer" class="cyber-panel rounded-lg p-6 min-h-[200px]">
-                <div class="cyber-panel-corner"></div>
+            <div class="cyber-panel rounded-lg p-4 md:p-6 min-h-[200px]">
+                <div class="panel-corner"></div>
                 <div id="noticesList" class="space-y-4">
-                    <div class="text-center text-gray-500 py-8">
-                        <i class="fas fa-satellite-dish text-4xl mb-3 opacity-50"></i>
-                        <p class="font-cyber tracking-wider">NO ACTIVE TRANSMISSIONS</p>
+                    <div class="text-center text-gray-600 py-12">
+                        <i class="fas fa-satellite text-4xl mb-4 opacity-30 animate-pulse"></i>
+                        <p class="font-mono text-sm tracking-wider">AWAITING_TRANSMISSIONS...</p>
+                        <p class="text-xs opacity-50 mt-2">Channel open • Frequency: 24/7</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Resources Section -->
-        <section id="resources" class="fade-in">
+        <section id="resources" class="scroll-mt-24">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-1 h-8 bg-pink-500 shadow-[0_0_10px_#ff00ff]"></div>
-                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">RESOURCE DATABASE</h3>
+                    <h3 class="font-cyber text-2xl font-bold neon-pink tracking-wider">DATA_PACKETS</h3>
                 </div>
-                <button onclick="loadResources()" class="text-cyan-400 hover:text-cyan-300 text-sm flex items-center gap-2 transition-colors">
-                    <i class="fas fa-sync-alt"></i> Sync
-                </button>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-mono text-gray-500" id="resourceCount">0 FILES</span>
+                    <button onclick="forceSync()" class="hack-btn py-2 px-3 text-xs">
+                        <i class="fas fa-sync-alt"></i> SYNC
+                    </button>
+                </div>
             </div>
             
-            <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Resources loaded here -->
+            <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Resources populated here -->
             </div>
             
-            <div id="emptyResources" class="cyber-panel rounded-lg p-12 text-center mt-6">
-                <div class="cyber-panel-corner"></div>
-                <i class="fas fa-database text-5xl text-gray-600 mb-4"></i>
-                <p class="font-cyber text-gray-500 tracking-wider">DATABASE EMPTY</p>
-                <p class="text-sm text-gray-600 mt-2">Resources will appear here once uploaded by administrators</p>
+            <div id="emptyResources" class="cyber-panel rounded-lg p-12 text-center">
+                <div class="panel-corner"></div>
+                <i class="fas fa-database text-5xl text-gray-700 mb-4 animate-pulse"></i>
+                <p class="font-mono text-gray-600 tracking-wider">NO_DATA_PACKETS</p>
+                <p class="text-xs text-gray-700 mt-2">Awaiting admin transmission...</p>
             </div>
         </section>
 
-        <!-- AI Assistant Section -->
-        <section id="ai-assistant" class="fade-in">
+        <!-- AI Neural Link Section -->
+        <section id="neural-link" class="scroll-mt-24">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-1 h-8 bg-purple-500 shadow-[0_0_10px_#bc13fe]"></div>
-                    <h3 class="font-cyber text-2xl font-bold text-white tracking-wider">AI CORE: FIATA</h3>
+                    <h3 class="font-cyber text-2xl font-bold text-purple-400 tracking-wider">NEURAL_LINK: FIATA</h3>
                 </div>
-                <div class="flex items-center gap-2 text-xs">
-                    <span class="status-dot status-online"></span>
-                    <span class="text-green-400">OPERATIONAL</span>
+                <div class="flex items-center gap-2">
+                    <div class="live-pulse bg-purple-500" style="box-shadow: 0 0 10px #bc13fe;"></div>
+                    <span class="text-xs text-purple-400 font-mono">AI_CORE_ONLINE</span>
                 </div>
             </div>
             
             <div id="chatInterface" class="cyber-panel rounded-lg overflow-hidden">
-                <div class="cyber-panel-corner"></div>
+                <div class="panel-corner"></div>
                 
                 <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 p-4 border-b border-cyan-500/20 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center pulse-glow">
+                <div class="bg-gradient-to-r from-green-900/20 to-purple-900/20 p-4 border-b border-green-500/20 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center animate-pulse shadow-[0_0_20px_rgba(0,255,65,0.5)]">
                         <i class="fas fa-brain text-white text-xl"></i>
                     </div>
                     <div>
-                        <h4 class="font-cyber text-white font-bold">Fiata Assistant</h4>
-                        <p class="text-xs text-cyan-400">Gemini 2.5 Flash Neural Network</p>
+                        <h4 class="font-cyber text-white font-bold tracking-wider">Fiata v2.5</h4>
+                        <p class="text-xs text-green-400/70 font-mono">Gemini_Neural_Network • Latency: 45ms</p>
                     </div>
                 </div>
                 
                 <!-- Chat Messages -->
-                <div id="chatMessages" class="h-96 overflow-y-auto p-4 space-y-4 bg-black/40">
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[80%]">
-                            <p class="text-gray-300 text-sm">Greetings, user. I am Fiata, your JM Club AI assistant. How may I assist your learning journey today?</p>
+                <div id="chatMessages" class="h-80 md:h-96 overflow-y-auto p-4 space-y-4 bg-black/40">
+                    <div class="flex items-start gap-3 chat-msg">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">AI</div>
+                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[85%]">
+                            <p class="text-gray-300 text-sm font-mono">Neural link established. I am Fiata, your JM Club AI assistant. How may I assist your learning protocol today?</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Typing Indicator -->
                 <div id="typingIndicator" class="hidden px-4 py-2">
-                    <div class="flex items-center gap-2 text-cyan-400 text-sm">
+                    <div class="flex items-center gap-2 text-green-400/70 text-xs font-mono">
                         <div class="flex gap-1">
-                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"></div>
-                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-green-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
                         </div>
-                        <span class="text-xs tracking-wider">PROCESSING...</span>
+                        <span>PROCESSING_NEURAL_PATTERNS...</span>
                     </div>
                 </div>
                 
                 <!-- Chat Input -->
-                <div class="p-4 bg-black/60 border-t border-cyan-500/20">
+                <div class="p-4 bg-black/60 border-t border-green-500/20">
                     <form id="chatForm" class="flex gap-3">
-                        <input 
-                            type="text" 
-                            id="chatInput" 
-                            placeholder="Enter command..." 
-                            class="cyber-input flex-1 rounded-lg px-4 py-3"
-                            autocomplete="off"
-                        >
-                        <button type="submit" id="sendBtn" class="cyber-btn px-6 py-3 font-bold">
+                        <input type="text" id="chatInput" placeholder="Enter neural command..." 
+                            class="hack-input flex-1 rounded-lg" autocomplete="off">
+                        <button type="submit" id="sendBtn" class="hack-btn py-3 px-6 rounded-lg">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
@@ -535,73 +698,83 @@
             
             <!-- Access Denied Message -->
             <div id="chatDisabled" class="hidden cyber-panel rounded-lg p-12 text-center border-red-500/50">
-                <i class="fas fa-lock text-6xl text-red-500 mb-4 animate-pulse"></i>
-                <h4 class="font-cyber text-2xl text-red-400 mb-2">ACCESS RESTRICTED</h4>
-                <p class="text-gray-400">Your membership privileges have been revoked.</p>
+                <i class="fas fa-lock text-6xl neon-red mb-4 animate-pulse"></i>
+                <h4 class="font-cyber text-2xl neon-red mb-2 tracking-wider">NEURAL_LINK_SEVERED</h4>
+                <p class="text-gray-500 font-mono">Your access privileges have been revoked by administrator.</p>
+                <p class="text-xs text-gray-600 mt-4">Contact system admin for reactivation.</p>
             </div>
         </section>
 
-        <!-- Application Form Section -->
-        <section id="apply" class="fade-in">
-            <div class="cyber-panel rounded-lg p-8 md:p-12 relative overflow-hidden">
-                <div class="cyber-panel-corner"></div>
+        <!-- Join Section -->
+        <section id="join" class="scroll-mt-24">
+            <div class="cyber-panel rounded-lg p-6 md:p-12 relative overflow-hidden">
+                <div class="panel-corner"></div>
                 
-                <!-- Decorative Elements -->
-                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl -ml-32 -mb-32 pointer-events-none"></div>
+                <!-- Background Elements -->
+                <div class="absolute top-0 right-0 w-96 h-96 bg-green-500/5 rounded-full blur-3xl -mr-48 -mt-48 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl -ml-48 -mb-48 pointer-events-none"></div>
                 
                 <div class="relative z-10">
                     <div class="text-center mb-10">
-                        <div class="inline-block mb-4">
-                            <i class="fas fa-fingerprint text-5xl text-cyan-400 pulse-glow"></i>
+                        <div class="inline-block mb-4 relative">
+                            <i class="fas fa-fingerprint text-6xl neon-green animate-pulse"></i>
+                            <div class="absolute inset-0 bg-green-500/20 blur-xl rounded-full"></div>
                         </div>
-                        <h3 class="font-cyber text-3xl md:text-4xl font-bold text-white mb-2 tracking-wider">MEMBERSHIP APPLICATION</h3>
-                        <p class="text-gray-400">Initialize your access credentials to join the network</p>
+                        <h3 class="font-cyber text-3xl md:text-4xl font-bold text-white mb-2 tracking-wider glitch" data-text="NEURAL_REGISTRATION">NEURAL_REGISTRATION</h3>
+                        <p class="text-gray-400 font-mono">Initialize your neural link to join the grid</p>
                     </div>
 
-                    <form id="applicationForm" class="max-w-3xl mx-auto space-y-6">
+                    <form id="joinForm" class="max-w-3xl mx-auto space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="space-y-2">
-                                <label class="text-cyan-400 text-xs tracking-wider uppercase">First Name <span class="text-pink-500">*</span></label>
-                                <input type="text" id="firstName" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="JOHN">
+                                <label class="text-green-400/70 text-xs font-mono uppercase tracking-wider">First_Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="firstName" required class="hack-input rounded-lg" placeholder="AGENT">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-cyan-400 text-xs tracking-wider uppercase">Middle Name</label>
-                                <input type="text" id="middleName" class="cyber-input w-full rounded-lg px-4 py-3" placeholder="OPTIONAL">
+                                <label class="text-green-400/70 text-xs font-mono uppercase tracking-wider">Middle_Name</label>
+                                <input type="text" id="middleName" class="hack-input rounded-lg" placeholder="OPTIONAL">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-cyan-400 text-xs tracking-wider uppercase">Last Name <span class="text-pink-500">*</span></label>
-                                <input type="text" id="lastName" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="DOE">
+                                <label class="text-green-400/70 text-xs font-mono uppercase tracking-wider">Last_Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="lastName" required class="hack-input rounded-lg" placeholder="CODENAME">
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-cyan-400 text-xs tracking-wider uppercase">Email Address <span class="text-pink-500">*</span></label>
-                            <input type="email" id="email" required class="cyber-input w-full rounded-lg px-4 py-3" placeholder="john.doe@net.com">
+                            <label class="text-green-400/70 text-xs font-mono uppercase tracking-wider">Neural_Frequency (Email) <span class="text-red-500">*</span></label>
+                            <input type="email" id="email" required class="hack-input rounded-lg" placeholder="agent@grid.net">
                         </div>
 
                         <div class="space-y-2">
-                            <label class="text-cyan-400 text-xs tracking-wider uppercase">Why do you want to join? <span class="text-pink-500">*</span></label>
-                            <textarea id="reason" required rows="4" class="cyber-input w-full rounded-lg px-4 py-3 resize-none" placeholder="Describe your objectives..."></textarea>
+                            <label class="text-green-400/70 text-xs font-mono uppercase tracking-wider">Mission_Objective <span class="text-red-500">*</span></label>
+                            <textarea id="reason" required rows="4" class="hack-input rounded-lg resize-none" placeholder="State your purpose for joining the neural network..."></textarea>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="cyber-btn w-full py-4 font-cyber font-bold text-lg tracking-wider">
-                            <i class="fas fa-upload mr-2"></i> <span id="submitText">TRANSMIT APPLICATION</span>
+                        <button type="submit" id="submitBtn" class="hack-btn w-full py-4 font-cyber font-bold text-lg tracking-wider relative overflow-hidden">
+                            <span id="btnText"><i class="fas fa-upload mr-2"></i> TRANSMIT_REGISTRATION</span>
+                            <div id="btnLoader" class="hidden absolute inset-0 flex items-center justify-center bg-green-500">
+                                <i class="fas fa-circle-notch fa-spin text-black text-xl"></i>
+                            </div>
                         </button>
                     </form>
 
-                    <!-- Success Message -->
-                    <div id="successMessage" class="hidden text-center py-12">
-                        <div class="w-24 h-24 mx-auto mb-6 relative">
+                    <!-- Success State -->
+                    <div id="successState" class="hidden text-center py-12">
+                        <div class="w-32 h-32 mx-auto mb-6 relative">
                             <div class="absolute inset-0 border-4 border-green-500 rounded-full animate-spin" style="animation-duration: 3s;"></div>
                             <div class="absolute inset-2 border-2 border-cyan-400 rounded-full animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
-                            <i class="fas fa-check text-4xl text-green-400 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+                            <i class="fas fa-check text-4xl neon-green absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
                         </div>
-                        <h4 class="font-cyber text-2xl text-green-400 mb-2 tracking-wider">TRANSMISSION COMPLETE</h4>
-                        <p class="text-gray-400 mb-6">Your application has been queued for review.</p>
-                        <button onclick="resetForm()" class="cyber-btn cyber-btn-pink px-8 py-3">
-                            <i class="fas fa-redo mr-2"></i> Submit Another
-                        </button>
+                        <h4 class="font-cyber text-2xl neon-green mb-2 tracking-wider">TRANSMISSION_COMPLETE</h4>
+                        <p class="text-gray-400 font-mono mb-6">Your neural signature has been queued for admin verification.</p>
+                        <div class="flex gap-4 justify-center">
+                            <button onclick="resetForm()" class="hack-btn hack-btn-cyan px-8 py-3">
+                                <i class="fas fa-redo mr-2"></i> NEW_REGISTRATION
+                            </button>
+                            <a href="admin.html" class="hack-btn px-8 py-3">
+                                <i class="fas fa-terminal mr-2"></i> ADMIN_LINK
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -610,10 +783,16 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-cyan-500/20 bg-black/50 py-8 mt-16">
+    <footer class="border-t border-green-500/20 bg-black/50 py-8 mt-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="font-cyber text-gray-500 text-sm tracking-wider">&copy; 2026 JM CLUB // CREATED BY JIBAN & MANISH</p>
-            <a href="admin.html" class="inline-block mt-2 text-cyan-500/50 hover:text-cyan-400 text-xs transition-colors tracking-widest">[ ACCESS ADMIN TERMINAL ]</a>
+            <p class="font-mono text-gray-600 text-xs tracking-[0.3em]">&copy; 2026 JM CLUB // NEURAL_NETWORK // JIBAN_X_MANISH</p>
+            <div class="mt-4 flex justify-center gap-4 text-xs">
+                <span class="text-green-500/50">ENCRYPTION: AES-256</span>
+                <span class="text-green-500/50">•</span>
+                <span class="text-green-500/50">PROTOCOL: HTTPS</span>
+                <span class="text-green-500/50">•</span>
+                <span class="text-green-500/50">STATUS: SECURE</span>
+            </div>
         </div>
     </footer>
 
@@ -622,11 +801,21 @@
         const CONFIG = {
             apiKey: 'AIzaSyC8SIbQ-zPeaJ_Pq6VZ1Dw1-ObESpvz7EI',
             apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+            syncInterval: 3000, // 3 second sync
             debug: true
         };
 
-        // Utility Functions
-        const log = (...args) => CONFIG.debug && console.log('[JM CLUB]', ...args);
+        // State
+        let lastNoticeCount = 0;
+        let lastFileCount = 0;
+        let syncInterval = null;
+
+        // Utilities
+        const log = (...args) => CONFIG.debug && console.log('[NEURAL]', ...args);
+        
+        const now = () => new Date().toLocaleTimeString('en-US', { hour12: false });
+        
+        const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
         
         const escapeHtml = (text) => {
             const div = document.createElement('div');
@@ -634,16 +823,144 @@
             return div.innerHTML;
         };
 
-        const generateId = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+        // Toast System
+        const toast = (msg, type = 'normal', duration = 4000) => {
+            const container = document.getElementById('toastContainer');
+            const el = document.createElement('div');
+            el.className = `hack-toast ${type} font-mono text-sm`;
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-${type === 'critical' ? 'exclamation-triangle' : type === 'alert' ? 'bell' : 'info-circle'} mt-1"></i>
+                    <div>
+                        <div class="font-bold text-xs mb-1 opacity-70">${type === 'critical' ? 'CRITICAL_ALERT' : type === 'alert' ? 'NOTIFICATION' : 'SYSTEM_MSG'}</div>
+                        <div>${msg}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(el);
+            requestAnimationFrame(() => el.classList.add('show'));
+            
+            setTimeout(() => {
+                el.classList.remove('show');
+                setTimeout(() => el.remove(), 300);
+            }, duration);
+        };
 
-        // Check Access Status
+        // Rive Animation Setup
+        const initRive = () => {
+            const canvas = document.getElementById('rive-canvas');
+            const ctx = canvas.getContext('2d');
+            let rotation = 0;
+            let pulse = 0;
+            let animationId;
+
+            const draw = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.save();
+                ctx.translate(canvas.width/2, canvas.height/2);
+                
+                // Outer rotating ring
+                ctx.rotate(rotation);
+                ctx.beginPath();
+                ctx.arc(0, 0, 50, 0, Math.PI * 2);
+                ctx.strokeStyle = '#00ff41';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([20, 10]);
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#00ff41';
+                ctx.stroke();
+                
+                // Inner pulsing hexagon
+                const scale = 1 + Math.sin(pulse) * 0.1;
+                ctx.scale(scale, scale);
+                ctx.rotate(-rotation * 2);
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI / 3) * i - Math.PI / 2;
+                    const x = Math.cos(angle) * 30;
+                    const y = Math.sin(angle) * 30;
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(0, 255, 65, 0.2)';
+                ctx.fill();
+                ctx.strokeStyle = '#00f3ff';
+                ctx.setLineDash([]);
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#00f3ff';
+                ctx.stroke();
+                
+                // Center text
+                ctx.rotate(rotation);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#00ff41';
+                ctx.fillText('JM', 0, 0);
+                
+                ctx.restore();
+                
+                rotation += 0.02;
+                pulse += 0.05;
+                animationId = requestAnimationFrame(draw);
+            };
+
+            draw();
+
+            // Pause when hidden
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    cancelAnimationFrame(animationId);
+                } else {
+                    draw();
+                }
+            });
+        };
+
+        // Matrix Background
+        const initMatrix = () => {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+            const drops = [];
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+
+            for (let i = 0; i < columns; i++) drops[i] = 1;
+
+            const draw = () => {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+            };
+
+            setInterval(draw, 35);
+        };
+
+        // Access Check
         const checkAccess = () => {
             const status = localStorage.getItem('jm_status');
             if (status === 'rejected') {
                 document.getElementById('accessDenied').classList.remove('hidden');
                 document.getElementById('chatInterface').classList.add('hidden');
                 document.getElementById('chatDisabled').classList.remove('hidden');
-                document.body.style.paddingTop = '50px';
+                document.body.style.paddingTop = '60px';
+                toast('ACCESS REVOKED: Contact administrator', 'critical', 10000);
             }
         };
 
@@ -661,37 +978,123 @@
             });
         };
 
+        // Real-Time Sync System
+        const startRealTimeSync = () => {
+            // Initial load
+            loadNotices();
+            loadResources();
+            updateSyncTime();
+
+            // 3-second polling
+            syncInterval = setInterval(() => {
+                checkForUpdates();
+                updateCountdown();
+            }, CONFIG.syncInterval);
+
+            // Update countdown display
+            let countdown = 3;
+            setInterval(() => {
+                countdown--;
+                if (countdown < 0) countdown = 3;
+                document.getElementById('nextUpdate').textContent = countdown + 's';
+            }, 1000);
+        };
+
+        const updateSyncTime = () => {
+            document.getElementById('lastSync').textContent = now();
+        };
+
+        const updateCountdown = () => {
+            // Reset visual bar
+            const bar = document.getElementById('syncBar');
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            setTimeout(() => {
+                bar.style.transition = 'width 3s linear';
+                bar.style.width = '100%';
+            }, 50);
+        };
+
+        const checkForUpdates = () => {
+            // Check notices
+            const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
+            if (notices.length > lastNoticeCount) {
+                const newCount = notices.length - lastNoticeCount;
+                lastNoticeCount = notices.length;
+                loadNotices();
+                toast(`${newCount} NEW TRANSMISSION${newCount > 1 ? 'S' : ''} RECEIVED FROM ADMIN`, 'alert');
+                updateSyncTime();
+            } else if (notices.length < lastNoticeCount) {
+                lastNoticeCount = notices.length;
+                loadNotices();
+                updateSyncTime();
+            }
+
+            // Check files
+            const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
+            if (files.length > lastFileCount) {
+                const newCount = files.length - lastFileCount;
+                lastFileCount = files.length;
+                loadResources();
+                toast(`${newCount} NEW DATA PACKET${newCount > 1 ? 'S' : ''} UPLOADED`, 'alert');
+                updateSyncTime();
+            } else if (files.length < lastFileCount) {
+                lastFileCount = files.length;
+                loadResources();
+                updateSyncTime();
+            }
+        };
+
+        const forceSync = () => {
+            checkForUpdates();
+            toast('Manual sync completed', 'normal');
+            updateSyncTime();
+        };
+
         // Load Notices
         const loadNotices = () => {
             const notices = JSON.parse(localStorage.getItem('jm_notices') || '[]');
             const container = document.getElementById('noticesList');
-            
+            const countBadge = document.getElementById('noticeCount');
+
+            // Sort by date (newest first)
+            notices.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            countBadge.textContent = `${notices.length} PENDING`;
+
             if (notices.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center text-gray-500 py-8">
-                        <i class="fas fa-satellite-dish text-4xl mb-3 opacity-50"></i>
-                        <p class="font-cyber tracking-wider">NO ACTIVE TRANSMISSIONS</p>
+                    <div class="text-center text-gray-600 py-12">
+                        <i class="fas fa-satellite text-4xl mb-4 opacity-30 animate-pulse"></i>
+                        <p class="font-mono text-sm tracking-wider">AWAITING_TRANSMISSIONS...</p>
+                        <p class="text-xs opacity-50 mt-2">Channel open • Frequency: 24/7</p>
                     </div>
                 `;
                 return;
             }
-            
-            container.innerHTML = notices.map(notice => {
-                const date = new Date(notice.date).toLocaleDateString();
+
+            container.innerHTML = notices.map((n, index) => {
                 const colors = {
-                    urgent: 'border-red-500 bg-red-500/10',
-                    high: 'border-yellow-500 bg-yellow-500/10',
-                    normal: 'border-cyan-500 bg-cyan-500/10'
+                    info: { border: 'border-cyan-500', bg: 'bg-cyan-500/10', text: 'text-cyan-400', icon: 'fa-info-circle' },
+                    warning: { border: 'border-amber-500', bg: 'bg-amber-500/10', text: 'text-amber-400', icon: 'fa-exclamation-triangle' },
+                    critical: { border: 'border-red-500', bg: 'bg-red-500/10', text: 'text-red-400', icon: 'fa-radiation' }
                 };
-                const color = colors[notice.priority] || colors.normal;
-                
+                const c = colors[n.level] || colors.info;
+                const date = new Date(n.date).toLocaleString();
+
                 return `
-                    <div class="border-l-4 ${color} p-4 rounded-r-lg">
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-cyber text-white font-bold">${escapeHtml(notice.title)}</h4>
-                            <span class="text-xs text-gray-500">${date}</span>
+                    <div class="cyber-panel rounded-lg p-4 border-l-4 ${c.border} ${index === 0 ? 'animate-pulse' : ''}" style="animation-duration: 3s;">
+                        <div class="panel-corner"></div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas ${c.icon} ${c.text} text-xl mt-1"></i>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-cyber font-bold text-white">${escapeHtml(n.title)}</h4>
+                                    <span class="text-[10px] text-gray-500 font-mono">${date}</span>
+                                </div>
+                                <p class="text-gray-400 text-sm font-mono leading-relaxed">${escapeHtml(n.content)}</p>
+                            </div>
                         </div>
-                        <p class="text-gray-400 text-sm">${escapeHtml(notice.content)}</p>
                     </div>
                 `;
             }).join('');
@@ -702,31 +1105,44 @@
             const files = JSON.parse(localStorage.getItem('jm_files') || '[]');
             const grid = document.getElementById('resourcesGrid');
             const empty = document.getElementById('emptyResources');
-            
+            const count = document.getElementById('resourceCount');
+
+            count.textContent = `${files.length} FILE${files.length !== 1 ? 'S' : ''}`;
+
             if (files.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
                 return;
             }
-            
+
             empty.classList.add('hidden');
-            grid.innerHTML = files.map(file => `
-                <div class="cyber-panel rounded-lg p-6 group hover:scale-[1.02] transition-transform duration-300">
-                    <div class="cyber-panel-corner"></div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-12 h-12 rounded bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30">
-                            <i class="fas fa-file-alt text-cyan-400 text-xl"></i>
+            grid.innerHTML = files.map((f, index) => {
+                const size = f.size ? (f.size / 1024).toFixed(1) + ' KB' : 'Unknown';
+                const icon = f.type?.includes('image') ? 'fa-image' : 
+                            f.type?.includes('pdf') ? 'fa-file-pdf' : 
+                            f.type?.includes('video') ? 'fa-video' :
+                            f.type?.includes('audio') ? 'fa-music' : 'fa-file-code';
+                
+                const delay = index * 100;
+
+                return `
+                    <div class="cyber-panel rounded-lg p-5 file-card" style="animation: fadeIn 0.5s ease-out ${delay}ms both;">
+                        <div class="panel-corner"></div>
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 rounded bg-pink-500/20 flex items-center justify-center border border-pink-500/30">
+                                <i class="fas ${icon} text-pink-400 text-xl"></i>
+                            </div>
+                            <span class="text-[10px] text-gray-500 font-mono border border-gray-700 px-2 py-1 rounded">${size}</span>
                         </div>
-                        <span class="text-xs text-gray-500 border border-gray-700 px-2 py-1 rounded">PDF</span>
+                        <h4 class="font-cyber text-white font-bold mb-2 truncate" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</h4>
+                        <p class="text-gray-500 text-xs mb-4 font-mono line-clamp-2">${escapeHtml(f.description || 'Classified data packet')}</p>
+                        <a href="${f.url}" download="${f.name}" 
+                           class="hack-btn hack-btn-pink block text-center py-2 text-xs w-full">
+                            <i class="fas fa-download mr-2"></i> DOWNLOAD_PACKET
+                        </a>
                     </div>
-                    <h4 class="font-cyber text-white font-bold mb-2 truncate" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</h4>
-                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">${escapeHtml(file.description || 'Classified resource material')}</p>
-                    <a href="${escapeHtml(file.url)}" target="_blank" rel="noopener" 
-                       class="cyber-btn block text-center py-2 text-sm">
-                        <i class="fas fa-download mr-2"></i> Access File
-                    </a>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         };
 
         // AI Chat System
@@ -736,74 +1152,72 @@
             const messages = document.getElementById('chatMessages');
             const typing = document.getElementById('typingIndicator');
             const btn = document.getElementById('sendBtn');
-            
-            const addMessage = (text, isUser = false) => {
+
+            const addMsg = (text, isUser = false) => {
                 const div = document.createElement('div');
-                div.className = `flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''} animate-[fadeIn_0.3s_ease-out]`;
+                div.className = `flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''} chat-msg`;
                 
                 if (isUser) {
                     div.innerHTML = `
                         <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0 text-xs font-bold text-black">YOU</div>
-                        <div class="cyber-panel rounded-lg rounded-tr-none p-3 max-w-[80%] border-pink-500/30">
-                            <p class="text-pink-300 text-sm">${escapeHtml(text)}</p>
+                        <div class="cyber-panel rounded-lg rounded-tr-none p-3 max-w-[85%] border-pink-500/30">
+                            <p class="text-pink-300 text-sm font-mono">${escapeHtml(text)}</p>
                         </div>
                     `;
                 } else {
                     div.innerHTML = `
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">AI</div>
-                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[80%]">
-                            <p class="text-gray-300 text-sm">${text}</p>
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-purple-600 flex items-center justify-center flex-shrink-0 text-xs font-bold text-white">AI</div>
+                        <div class="cyber-panel rounded-lg rounded-tl-none p-3 max-w-[85%]">
+                            <p class="text-gray-300 text-sm font-mono leading-relaxed">${text}</p>
                         </div>
                     `;
                 }
                 
                 messages.appendChild(div);
                 messages.scrollTop = messages.scrollHeight;
-                
-                // Save to session
-                sessionStorage.setItem('jm_chat', messages.innerHTML);
+                sessionStorage.setItem('jm_chat_log', messages.innerHTML);
             };
-            
+
             // Load history
-            const history = sessionStorage.getItem('jm_chat');
+            const history = sessionStorage.getItem('jm_chat_log');
             if (history) messages.innerHTML = history;
-            
+
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const text = input.value.trim();
                 if (!text) return;
-                
-                addMessage(text, true);
+
+                addMsg(text, true);
                 input.value = '';
                 btn.disabled = true;
                 typing.classList.remove('hidden');
                 messages.scrollTop = messages.scrollHeight;
-                
+
                 try {
-                    const response = await fetch(`${CONFIG.apiUrl}?key=${CONFIG.apiKey}`, {
+                    const res = await fetch(`${CONFIG.apiUrl}?key=${CONFIG.apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text }] }]
-                        })
+                        body: JSON.stringify({ contents: [{ parts: [{ text }] }] })
                     });
-                    
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    
-                    const data = await response.json();
-                    let reply = 'Neural network error. Please retry.';
-                    
+
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                    const data = await res.json();
+                    let reply = 'Neural pattern unrecognized. Please rephrase.';
+
                     if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        reply = data.candidates[0].content.parts[0].text;
+                        reply = data.candidates[0].content.parts[0].text
+                            .replace(/\n/g, '<br>')
+                            .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-cyan-400 hover:underline">$1</a>');
                     }
-                    
+
                     typing.classList.add('hidden');
-                    addMessage(reply);
-                    
+                    addMsg(reply);
+
                 } catch (err) {
                     log('Chat error:', err);
                     typing.classList.add('hidden');
-                    addMessage('Connection lost. Check network and retry.');
+                    addMsg('Neural link disrupted. Check connection and retry.');
                 } finally {
                     btn.disabled = false;
                     input.focus();
@@ -811,17 +1225,17 @@
             });
         };
 
-        // Application Form
-        const initApplicationForm = () => {
-            const form = document.getElementById('applicationForm');
-            const success = document.getElementById('successMessage');
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            
+        // Join Form
+        const initJoinForm = () => {
+            const form = document.getElementById('joinForm');
+            const success = document.getElementById('successState');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
-                const application = {
+
+                const data = {
                     id: generateId(),
                     firstName: document.getElementById('firstName').value.trim(),
                     middleName: document.getElementById('middleName').value.trim(),
@@ -831,59 +1245,86 @@
                     date: new Date().toISOString(),
                     status: 'pending'
                 };
-                
+
                 // Validation
-                if (!application.firstName || !application.lastName || !application.email || !application.reason) {
-                    alert('Please fill all required fields');
+                if (!data.firstName || !data.lastName || !data.email || !data.reason) {
+                    toast('All required fields must be filled', 'critical');
                     return;
                 }
-                
-                // Email validation
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(application.email)) {
-                    alert('Please enter a valid email');
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+                    toast('Invalid neural frequency (email)', 'critical');
                     return;
                 }
-                
-                // Save
-                const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
-                apps.push(application);
-                localStorage.setItem('jm_apps', JSON.stringify(apps));
-                
-                log('Application submitted:', application);
-                
-                // Show success
-                form.classList.add('hidden');
-                success.classList.remove('hidden');
-                success.classList.add('fade-in');
+
+                // Show loading
+                btnText.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+
+                // Simulate transmission delay
+                setTimeout(() => {
+                    const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+                    apps.push(data);
+                    localStorage.setItem('jm_apps', JSON.stringify(apps));
+
+                    log('Registration transmitted:', data);
+
+                    // Show success
+                    form.classList.add('hidden');
+                    success.classList.remove('hidden');
+                    success.classList.add('fade-in');
+
+                    // Notify admin (in real scenario, this would be a push notification)
+                    toast('Registration transmitted! Admin will be notified within 3 seconds.', 'normal', 6000);
+
+                    btnText.classList.remove('hidden');
+                    btnLoader.classList.add('hidden');
+                }, 1500);
             });
         };
 
-        // Reset Form
         window.resetForm = () => {
-            document.getElementById('applicationForm').reset();
-            document.getElementById('applicationForm').classList.remove('hidden');
-            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('joinForm').reset();
+            document.getElementById('joinForm').classList.remove('hidden');
+            document.getElementById('successState').classList.add('hidden');
         };
 
-        // Initialize
+        // Initialize Everything
         document.addEventListener('DOMContentLoaded', () => {
-            log('Initializing JM Club Portal...');
+            log('NEURAL_INTERFACE v3.0 INITIALIZING...');
+            
+            initRive();
+            initMatrix();
             checkAccess();
             initMobileMenu();
-            loadNotices();
-            loadResources();
             initChat();
-            initApplicationForm();
-            
-            // Refresh notices every 30 seconds
-            setInterval(loadNotices, 30000);
+            initJoinForm();
+            startRealTimeSync();
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            log('SYSTEM ONLINE • REAL-TIME SYNC ACTIVE • 3 SECOND INTERVAL');
         });
 
         // Global error handler
         window.onerror = (msg, url, line) => {
-            log(`Error: ${msg} at ${line}`);
+            log(`SYSTEM_ERROR: ${msg} at line ${line}`);
             return false;
         };
+
+        // Cleanup on unload
+        window.addEventListener('beforeunload', () => {
+            if (syncInterval) clearInterval(syncInterval);
+        });
     </script>
 </body>
 </html>
