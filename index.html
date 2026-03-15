@@ -1,4 +1,4 @@
-<!-- index.html - JM Club CYBERPUNK PORTAL v3.0 -->
+<!-- index.html - JM Club NEURAL INTERFACE v3.1 (FIXED) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -406,11 +406,16 @@
             transition: width 0.3s ease;
         }
         
-        /* Access Denied Banner */
+        /* Access Denied Banner - FIXED POSITIONING */
         .access-denied {
-            background: linear-gradient(90deg, rgba(255,0,64,0.2), rgba(255,0,64,0.1));
+            background: linear-gradient(90deg, rgba(255,0,64,0.3), rgba(255,0,64,0.1));
             border-bottom: 2px solid var(--neon-red);
             animation: denied-pulse 2s infinite;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9997;
         }
         
         @keyframes denied-pulse {
@@ -463,7 +468,6 @@
             }
         }
     </style>
-<base target="_blank">
 </head>
 <body class="crt">
     <div class="scanline"></div>
@@ -472,8 +476,8 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
     
-    <!-- Access Denied Banner (Hidden by default) -->
-    <div id="accessDenied" class="hidden access-denied fixed top-0 left-0 w-full z-50 py-3 px-4">
+    <!-- Access Denied Banner - FIXED: Only shows when EXPLICITLY rejected -->
+    <div id="accessDenied" class="hidden access-denied py-3 px-4">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-3">
             <i class="fas fa-ban neon-red text-xl animate-pulse"></i>
             <span class="font-cyber neon-red tracking-widest text-sm md:text-base">/// ACCESS REVOKED /// NEURAL LINK TERMINATED ///</span>
@@ -482,7 +486,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-40 bg-black/90 border-b border-green-500/30 backdrop-blur-md">
+    <nav id="mainNav" class="fixed top-0 w-full z-40 bg-black/90 border-b border-green-500/30 backdrop-blur-md transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-4">
@@ -492,7 +496,7 @@
                     </div>
                     <div>
                         <h1 class="font-cyber text-xl md:text-2xl font-bold neon-green tracking-wider glitch" data-text="JM CLUB">JM CLUB</h1>
-                        <p class="text-[10px] md:text-xs text-green-400/70 tracking-[0.3em]">NEURAL_INTERFACE v3.0</p>
+                        <p class="text-[10px] md:text-xs text-green-400/70 tracking-[0.3em]">NEURAL_INTERFACE v3.1</p>
                     </div>
                 </div>
                 
@@ -525,7 +529,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto space-y-16">
+    <main id="mainContent" class="pt-24 pb-12 px-4 max-w-7xl mx-auto space-y-16">
         
         <!-- Hero Section -->
         <section class="text-center py-12 md:py-20 relative">
@@ -797,9 +801,9 @@
     </footer>
 
     <script>
-        // Configuration
+        // Configuration - UPDATED API KEY
         const CONFIG = {
-            apiKey: 'AIzaSyC8SIbQ-zPeaJ_Pq6VZ1Dw1-ObESpvz7EI',
+            apiKey: 'AIzaSyDDEQ97AAtpvOZWv2JEbghjmf0JytPz8do',
             apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
             syncInterval: 3000, // 3 second sync
             debug: true
@@ -809,6 +813,7 @@
         let lastNoticeCount = 0;
         let lastFileCount = 0;
         let syncInterval = null;
+        let currentUserStatus = null; // 'pending', 'member', 'rejected', or null
 
         // Utilities
         const log = (...args) => CONFIG.debug && console.log('[NEURAL]', ...args);
@@ -952,16 +957,80 @@
             setInterval(draw, 35);
         };
 
-        // Access Check
+        // CRITICAL FIX: Proper Access Control Check
         const checkAccess = () => {
-            const status = localStorage.getItem('jm_status');
-            if (status === 'rejected') {
-                document.getElementById('accessDenied').classList.remove('hidden');
-                document.getElementById('chatInterface').classList.add('hidden');
-                document.getElementById('chatDisabled').classList.remove('hidden');
-                document.body.style.paddingTop = '60px';
-                toast('ACCESS REVOKED: Contact administrator', 'critical', 10000);
+            // Get all applications
+            const apps = JSON.parse(localStorage.getItem('jm_apps') || '[]');
+            
+            // Get current user's email from form if filled, or check all pending
+            const emailInput = document.getElementById('email');
+            const userEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+            
+            // Find application by email if available
+            let userApp = null;
+            if (userEmail) {
+                userApp = apps.find(a => a.email.toLowerCase() === userEmail);
             }
+            
+            // If no specific user found, check if any application exists with rejected status
+            // This is for demo purposes - in production, you'd use session/user ID
+            const rejectedApp = apps.find(a => a.status === 'rejected');
+            
+            // Only show access denied if:
+            // 1. We found a rejected application for this specific user, OR
+            // 2. Global lock is set (for testing)
+            const globalLock = localStorage.getItem('jm_global_lock') === 'true';
+            
+            // Check if this specific user is rejected
+            const isRejected = userApp && userApp.status === 'rejected';
+            
+            log('Access check:', { userEmail, foundApp: userApp?.status, isRejected, globalLock });
+            
+            // Show access denied ONLY if explicitly rejected
+            if (isRejected || (globalLock && userApp)) {
+                showAccessDenied();
+                currentUserStatus = 'rejected';
+            } else if (userApp) {
+                currentUserStatus = userApp.status; // 'pending' or 'member'
+                hideAccessDenied();
+            } else {
+                currentUserStatus = null; // No application yet
+                hideAccessDenied();
+            }
+        };
+
+        const showAccessDenied = () => {
+            const banner = document.getElementById('accessDenied');
+            const nav = document.getElementById('mainNav');
+            const main = document.getElementById('mainContent');
+            const chatInterface = document.getElementById('chatInterface');
+            const chatDisabled = document.getElementById('chatDisabled');
+            
+            banner.classList.remove('hidden');
+            nav.style.top = '48px'; // Adjust for banner
+            main.style.paddingTop = '72px'; // Extra space
+            
+            // Disable chat
+            if (chatInterface) chatInterface.classList.add('hidden');
+            if (chatDisabled) chatDisabled.classList.remove('hidden');
+            
+            toast('ACCESS REVOKED: Contact administrator', 'critical', 10000);
+        };
+
+        const hideAccessDenied = () => {
+            const banner = document.getElementById('accessDenied');
+            const nav = document.getElementById('mainNav');
+            const main = document.getElementById('mainContent');
+            const chatInterface = document.getElementById('chatInterface');
+            const chatDisabled = document.getElementById('chatDisabled');
+            
+            banner.classList.add('hidden');
+            nav.style.top = '0';
+            main.style.paddingTop = '6rem'; // Reset to original
+            
+            // Enable chat
+            if (chatInterface) chatInterface.classList.remove('hidden');
+            if (chatDisabled) chatDisabled.classList.add('hidden');
         };
 
         // Mobile Menu
@@ -989,6 +1058,7 @@
             syncInterval = setInterval(() => {
                 checkForUpdates();
                 updateCountdown();
+                checkAccess(); // Re-check access status periodically
             }, CONFIG.syncInterval);
 
             // Update countdown display
@@ -1005,7 +1075,6 @@
         };
 
         const updateCountdown = () => {
-            // Reset visual bar
             const bar = document.getElementById('syncBar');
             bar.style.transition = 'none';
             bar.style.width = '0%';
@@ -1184,6 +1253,13 @@
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                
+                // Check if user is rejected before sending
+                if (currentUserStatus === 'rejected') {
+                    toast('NEURAL_LINK_SEVERED: Cannot transmit', 'critical');
+                    return;
+                }
+                
                 const text = input.value.trim();
                 if (!text) return;
 
@@ -1232,6 +1308,12 @@
             const btnText = document.getElementById('btnText');
             const btnLoader = document.getElementById('btnLoader');
 
+            // Check access when email changes
+            const emailInput = document.getElementById('email');
+            emailInput.addEventListener('blur', () => {
+                checkAccess();
+            });
+
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
@@ -1274,7 +1356,11 @@
                     success.classList.remove('hidden');
                     success.classList.add('fade-in');
 
-                    // Notify admin (in real scenario, this would be a push notification)
+                    // Update current status
+                    currentUserStatus = 'pending';
+                    checkAccess();
+
+                    // Notify
                     toast('Registration transmitted! Admin will be notified within 3 seconds.', 'normal', 6000);
 
                     btnText.classList.remove('hidden');
@@ -1287,15 +1373,17 @@
             document.getElementById('joinForm').reset();
             document.getElementById('joinForm').classList.remove('hidden');
             document.getElementById('successState').classList.add('hidden');
+            currentUserStatus = null;
+            checkAccess();
         };
 
         // Initialize Everything
         document.addEventListener('DOMContentLoaded', () => {
-            log('NEURAL_INTERFACE v3.0 INITIALIZING...');
+            log('NEURAL_INTERFACE v3.1 INITIALIZING...');
             
             initRive();
             initMatrix();
-            checkAccess();
+            checkAccess(); // Initial check
             initMobileMenu();
             initChat();
             initJoinForm();
